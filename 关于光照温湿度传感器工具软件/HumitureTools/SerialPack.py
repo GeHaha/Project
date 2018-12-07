@@ -20,14 +20,14 @@ class DataPack():
     def data(self):
         return self.msg
         
-    def setDecieveID(self,did):
+    def setDecieveID(self):
         return self.msg[0] 
         
     
-    def setFunctionCode(self,code):
+    def setFunctionCode(self):
         return self.msg[1] 
         
-    def setStartId(self,startid):
+    def setStartId(self):
         return self.msg[2]
         
     def setDataLen(self):

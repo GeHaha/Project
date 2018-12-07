@@ -32,11 +32,11 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Circle_pushButton.clicked.connect(self.circle)
         
     def port_connect(self):
-        self.communcate.connect()
+        self.Communcate.connect()
         self.Show_label.setText('打开成功！')
         
     def port_close(self):
-        self.communcate.close()
+        self.Communcate.close()
         self.Show_label.setText("关闭成功！")
         
     def single(self):
@@ -44,7 +44,6 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
     
     def circle(self):
         pass
-
 
     
 if __name__ == '__main__':
