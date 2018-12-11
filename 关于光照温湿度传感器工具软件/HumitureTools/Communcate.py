@@ -15,6 +15,7 @@ import serial
 from PyQt5 import QtCore,QtGui,QtWidgets
 import sys
 import time
+import minimalmodbus
 
 
 class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
@@ -38,6 +39,7 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         self.setupUi(self)
     
     def connect(self):
+        """
         self.ser.port = self.Port_comboBox.currentText()
         self.ser.baudrate = self.Baud_comboBox.currentText()
         self.ser.bytesize = serial.EIGHTBITS
@@ -49,7 +51,14 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
             self.Show_label.setText("串口已打开")          
         else:
             self.Show_label.setText("请打开串口")
-            
+         
+        """
+        self.minimalmodbus.BAUDRATE = 9600
+        self.minimalmodbus.PARITY = 'N'
+        self.minimalmodbus.STOPBITS = 1
+        self.minimalmodbus.BYTESIZE = 8
+        self.ser.open()
+        
     def close(self):
         self.ser.close()
          
@@ -57,6 +66,7 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         msg = self.Send_lineEdit.setText()
         self.ser.write(msg)
         
+     
     def receive(self):
         num = 0
         res_data = []
@@ -70,6 +80,38 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
                 self.ser.flushInput()
                 num  += 1
                 self.Show_label.setText("接收数据 :" + str(num))
+                
+     #read the register 1 data
+    def get_illuminance(self):
+        pass
+    
+    
+    #read the register 2 data
+    def get_temperature(self):
+        pass
+    
+    #read the register 3 data
+    def get_humidity(self):
+        pass
+    
+    #read the register 4 data
+    
+    def get_airspeed(self):
+        pass
+    
+    def show_illuminance(self):
+        pass
+    
+    def show_temperature(self):
+        pass
+    
+    def show_humidity(self):
+        pass
+    
+    def show_airspeed(self):
+        pass
+    
+    
         
     
     

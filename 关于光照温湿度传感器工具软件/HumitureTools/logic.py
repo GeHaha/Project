@@ -44,7 +44,8 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
     
     def circle(self):
         pass
-
+    
+    
     
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
