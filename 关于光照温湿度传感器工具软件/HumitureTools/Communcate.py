@@ -18,6 +18,15 @@ import time
 import minimalmodbus
 
 
+instrument = minimalmodbus.Instrument('COM1',1)
+instrument.serial.baudrate = 9600
+instrument.serial.byteszie = 8
+instrument.serial.parity = serial.PARITY_NONE
+instrument.serial.stopbits = 1
+instrument.address = 1   # this is the slave address number
+instrument.mode = minimalmodbus.MODE_RTU   # rtu or ascii mode
+minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL = True
+
 class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
     __instance = None
     __isFirstInit = False
@@ -26,7 +35,6 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         if not cls.__instance:
             Communcate.__instance = super().__new__(cls)
         return cls.__instance
-    
     
     def __init__(self):
         super(Communcate,self).__init__()
@@ -37,67 +45,52 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
             pass
         self.ser = serial.Serial()
         self.setupUi(self)
-    
-    def connect(self):
-        """
-        self.ser.port = self.Port_comboBox.currentText()
-        self.ser.baudrate = self.Baud_comboBox.currentText()
-        self.ser.bytesize = serial.EIGHTBITS
-        self.ser.parity = serial.PARITY_NONE
-        self.ser.stopbits = serial.STOPBITS_ONE
-        self.ser.open()
-        if(self.ser.open()):
-            self.Open_pushButton.setEnavled(False)  
-            self.Show_label.setText("串口已打开")          
-        else:
-            self.Show_label.setText("请打开串口")
-         
-        """
-        self.minimalmodbus.BAUDRATE = 9600
-        self.minimalmodbus.PARITY = 'N'
-        self.minimalmodbus.STOPBITS = 1
-        self.minimalmodbus.BYTESIZE = 8
-        self.ser.open()
-        
+
     def close(self):
         self.ser.close()
+        
          
     def send(self,msg):
         msg = self.Send_lineEdit.setText()
         self.ser.write(msg)
-        
      
+    
     def receive(self):
-        num = 0
-        res_data = []
+        res_data = ''
         while(self.ser.isOpen()):
-            
             size = self.ser.inWaiting()
             if size:
-                res_data = self.ser.read_all() #获取所有数据
-                self.Recieve_plainTextEdit.append(binascii.b2a_hex(res_data).decode())
-                self.Recieve_plainTextEdit.moveCursor(QtGui.QTextCursor.End)
-                self.ser.flushInput()
-                num  += 1
-                self.Show_label.setText("接收数据 :" + str(num))
+                res_data = self.ser.read_all()
+                self.Recieve_plainTextEdit.append(res_data.decode())       
+                print(1)
+            self.ser.flushInput()
                 
-     #read the register 1 data
+        
+    def checkCrc(self):
+        pass
+    
+    
+     #read the register 1 data,光照度
     def get_illuminance(self):
-        pass
+        illuminance = instrument.read_register(1,1)
+        print(illuminance)
     
     
-    #read the register 2 data
+    #read the register 2 data 温度
     def get_temperature(self):
-        pass
+        temperature = instrument.read_register(2,1)
+        print(temperature)
     
-    #read the register 3 data
+    #read the register 3 data 湿度
     def get_humidity(self):
-        pass
-    
-    #read the register 4 data
-    
-    def get_airspeed(self):
-        pass
+        humidity = instrument.read_register(3,1)
+        print(humidity)
+        
+   
+    #read the register 4 data 风 
+    def get_airspeed(self): 
+        airspeed = instrument.read_register(4,1)
+        print(airspeed)
     
     def show_illuminance(self):
         pass

@@ -226,8 +226,8 @@
     <widget class="QPushButton" name="Circle_pushButton">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>30</y>
+       <x>160</x>
+       <y>70</y>
        <width>75</width>
        <height>31</height>
       </rect>
@@ -239,8 +239,8 @@
     <widget class="QPushButton" name="Signal_pushButton">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>30</y>
+       <x>30</x>
+       <y>70</y>
        <width>75</width>
        <height>31</height>
       </rect>
@@ -268,27 +268,14 @@
     <widget class="QPushButton" name="Close_pushButton">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>70</y>
+       <x>270</x>
+       <y>20</y>
        <width>75</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>关闭</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="Open_pushButton">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>75</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>打开</string>
      </property>
     </widget>
    </widget>

@@ -16,7 +16,7 @@ import binascii
 
 from Communcate import Communcate
 from DataBase import DataBase
-
+import time
 
 #信号调用
 class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
@@ -24,29 +24,31 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         super(signal_ui,self).__init__()
         self.ser = serial.Serial()
         self.setupUi(self)
-        self.Communcate= Communcate() 
-        
-        self.Open_pushButton.clicked.connect(self.port_connect)
+        self.Communcate= Communcate()        
         self.Close_pushButton.clicked.connect(self.port_close)
         self.Single_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
+        self.Stop_pushButton.clicked.connect(self.stop)
         
-    def port_connect(self):
-        self.Communcate.connect()
-        self.Show_label.setText('打开成功！')
         
     def port_close(self):
         self.Communcate.close()
         self.Show_label.setText("关闭成功！")
         
     def single(self):
-        pass
-    
+        self.Communcate.send()
+        self.Show_label.setText("one send")
+        
     def circle(self):
+        while True:
+            self.Communcate.send()
+            time.sleep(int(self.Time_lineEdit.currentText()))
+    
+    def stop(self):
         pass
     
-    
-    
+        
+         
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()

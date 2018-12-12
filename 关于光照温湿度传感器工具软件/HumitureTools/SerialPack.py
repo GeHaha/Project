@@ -11,7 +11,7 @@ DeviceId = [0X01]
 FunctionCode =[0X03]
 StartId= [0x00,0x00]
 DataLen = [0x00,0x04]
-CheckCrc= [0x44,0x09]
+Crc= [0x44,0x09]
 
 class DataPack():
     def __init__(self):
