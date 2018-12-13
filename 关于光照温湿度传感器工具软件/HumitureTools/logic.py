@@ -35,6 +35,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Communcate.close()
         self.Show_label.setText("关闭成功！")
         
+        
     def single(self):
         self.Communcate.send()
         self.Show_label.setText("one send")

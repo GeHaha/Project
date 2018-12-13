@@ -65,35 +65,38 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
                 print(1)
             self.ser.flushInput()
                 
-        
+    def read_register(self):
+        pass
+    
     def checkCrc(self):
         pass
     
     
      #read the register 1 data,光照度
     def get_illuminance(self):
-        illuminance = instrument.read_register(1,1)
+        illuminance = instrument.read_register(1,1,3,signed = True)
         print(illuminance)
     
     
     #read the register 2 data 温度
     def get_temperature(self):
-        temperature = instrument.read_register(2,1)
+        temperature = instrument.read_register(2,1,3,signed = True)
         print(temperature)
     
     #read the register 3 data 湿度
     def get_humidity(self):
-        humidity = instrument.read_register(3,1)
+        humidity = instrument.read_register(3,1,3,signed = False)
         print(humidity)
         
    
     #read the register 4 data 风 
     def get_airspeed(self): 
-        airspeed = instrument.read_register(4,1)
+        airspeed = instrument.read_register(4,1,3,signed = False)
+        
         print(airspeed)
     
     def show_illuminance(self):
-        pass
+        
     
     def show_temperature(self):
         pass
