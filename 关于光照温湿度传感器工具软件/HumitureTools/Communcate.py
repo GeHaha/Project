@@ -46,32 +46,31 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         self.ser = serial.Serial()
         self.setupUi(self)
 
+
     def close(self):
         self.ser.close()
+               
+    def send(self):
+        self.ser.write(binascii.a2b_hex(self.Send_lineEdit)
         
-         
-    def send(self,msg):
-        msg = self.Send_lineEdit.setText()
-        self.ser.write(msg)
-     
-    
-    def receive(self):
+    def receive(self):      
         res_data = ''
         while(self.ser.isOpen()):
             size = self.ser.inWaiting()
             if size:
                 res_data = self.ser.read_all()
-                self.Recieve_plainTextEdit.append(res_data.decode())       
-                print(1)
-            self.ser.flushInput()
-                
-    def read_register(self):
-        pass
-    
-    def checkCrc(self):
-        pass
-    
-    
+                self.Recieve_plainTextEdit.append(res_data.decode())
+                      
+                msg = DataPack()
+                msg.setData()
+                return msg
+                self.ser.flushInput()
+               
+               # self.Recieve_plainTextEdit.append(res_data.decode())       
+               # self.Recieve_plainTextEdit.moveCursor(QtGui.QTextCursor.End)
+               # self.ser.flushInput()
+               # self.Show_label.setText("接收成功")
+                  
      #read the register 1 data,光照度
     def get_illuminance(self):
         illuminance = instrument.read_register(1,1,3,signed = True)
@@ -80,22 +79,22 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
     
     #read the register 2 data 温度
     def get_temperature(self):
-        temperature = instrument.read_register(2,1,3,signed = True)
+        temperature = instrument.read_register(2,2,3,signed = True)
         print(temperature)
     
     #read the register 3 data 湿度
     def get_humidity(self):
-        humidity = instrument.read_register(3,1,3,signed = False)
+        humidity = instrument.read_register(3,2,3,signed = False)
         print(humidity)
         
    
     #read the register 4 data 风 
     def get_airspeed(self): 
-        airspeed = instrument.read_register(4,1,3,signed = False)
-        
+        airspeed = instrument.read_register(4,1,3,signed = False)   
         print(airspeed)
-    
+   
     def show_illuminance(self):
+        pass
         
     
     def show_temperature(self):

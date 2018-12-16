@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
         self.Command_groupBox.setObjectName("Command_groupBox")
         self.Send_lineEdit = QtWidgets.QLineEdit(self.Command_groupBox)
         self.Send_lineEdit.setGeometry(QtCore.QRect(100, 80, 281, 31))
-        self.Send_lineEdit.setText("")
+        self.Send_lineEdit.setText("01 03 00 00 04 44 09")
         self.Send_lineEdit.setObjectName("Send_lineEdit")
         self.Recieve_label = QtWidgets.QLabel(self.Command_groupBox)
         self.Recieve_label.setGeometry(QtCore.QRect(20, 140, 61, 31))

@@ -36,20 +36,20 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Show_label.setText("关闭成功！")
         
         
-    def single(self):
+    def single(self,msg):
         self.Communcate.send()
         self.Show_label.setText("one send")
         
-    def circle(self):
+    def circle(self,msg):
         while True:
             self.Communcate.send()
             time.sleep(int(self.Time_lineEdit.currentText()))
     
     def stop(self):
-        pass
-    
-        
-         
+        self.ser.cancel_read()
+        self.Show_label.setText('serial read is cancel')
+      
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
