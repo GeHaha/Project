@@ -53,4 +53,20 @@ class DataPack():
     def CheckCrc(self):
         self.msg[7] = self.msg[0]+self.msg[1]+ self.msg[2] + self.msg[3] + self.msg[4] + self.msg[5] +self.msg[6]
         
+    def calculate_crc16(self,data):
+        crc = 0xFFFF
         
+        for char in data:
+            crc = (crc >> 8)^ Const.CRC16_TABLE[((crc)^char) & 0xFF]
+        
+        return struct.pack('<H',crc)
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            

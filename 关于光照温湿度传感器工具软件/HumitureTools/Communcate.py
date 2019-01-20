@@ -70,8 +70,8 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
                # self.Recieve_plainTextEdit.moveCursor(QtGui.QTextCursor.End)
                # self.ser.flushInput()
                # self.Show_label.setText("接收成功")
-                  
-     #read the register 1 data,光照度
+                
+    #read the register 1 data,光照度
     def get_illuminance(self):
         illuminance = instrument.read_register(1,1,3,signed = True)
         print(illuminance)
