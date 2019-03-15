@@ -18,6 +18,7 @@ from Communcate import Communcate
 from DataBase import DataBase
 import time
 
+
 #信号调用
 class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
@@ -25,16 +26,18 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.ser = serial.Serial()
         self.setupUi(self)
         self.Communcate= Communcate()        
-        self.Close_pushButton.clicked.connect(self.port_close)
+        self.Close_pushButton.clicked.connect(self.portClose)
         self.Single_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
         self.Stop_pushButton.clicked.connect(self.stop)
         
-        
-    def port_close(self):
+    def portOpen(self):
+        self.Communcate.open()
+       
+    
+    def portClose(self):
         self.Communcate.close()
-        self.Show_label.setText("关闭成功！")
-        
+    
         
     def single(self,msg):
         self.Communcate.send()
