@@ -41,7 +41,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         
     def single(self,msg):
         self.Communcate.send()
-        self.Show_label.setText("one send")
+        self.Show_label.setText("one send")                           
         
     def circle(self,msg):
         while True:
