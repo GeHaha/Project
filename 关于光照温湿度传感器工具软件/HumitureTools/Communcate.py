@@ -154,6 +154,12 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
             print('CRC32 is not support')
             return 0
         
+        
+        def  performCommand(self,functioncode,paylaodToSlave):
+            
+            checkFunctioncode(functioncode,None)
+            
+        
 # 测试用
 if __name__ == '__main__':
     crc16 = crcmod.mkCrcFun(0x18005,initCrc = 0xFFFF,REV = True,xorOut = 0x0000)

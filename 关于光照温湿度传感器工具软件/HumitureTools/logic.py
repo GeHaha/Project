@@ -15,6 +15,7 @@ import sys
 import binascii
 
 from Communcate import Communcate
+from Communcate_1 import sensorInstrument
 from DataBase import DataBase
 import time
 
