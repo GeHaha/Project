@@ -75,6 +75,7 @@ class RS485(minimalmodbus.Instrument):
         mode = 'MODE_RTU'
         functioncode = 0x03
         
+        
         #响应字符串的有效负载部分,接收到的响应格式应该是:* 
         #RTU模式:slaveaddress byte + functioncode byte + payloaddata + CRC(两个字节)
         try:            
@@ -83,8 +84,8 @@ class RS485(minimalmodbus.Instrument):
         # payload_data 包括返回额字节数，和采集到的温湿度数据共9个字节
         except ValueError:
             print('there is any problem with received address,functioncode,crc')
+            
     
-    """    
      #执行带有功能码的的命令。
     def performCommand(self):
         
@@ -110,7 +111,7 @@ class RS485(minimalmodbus.Instrument):
         calCRC_string =  minimalmodbus._calculateCrcString(inputstring)
         return calCRC_string
         
-    """
+  
     #Convert a byte string to a hex encoded string, with spaces for easier reading.
     #将字节字符串转换为十六进制编码的字符串，并使用空格以便阅读。
     def hexlify(self):
@@ -126,14 +127,14 @@ class RS485(minimalmodbus.Instrument):
         return num
     
     
-    """
+  
     def bytestringToValuelist(self):
         
         # bytestring 是采集到的数据     
         Valuelist = []
         Valuelist = minimalmodbus._bytestringToValuelist(bytestring,numberofRegisters)
         return Valuelist
-    """
+    
    
      
     
@@ -178,7 +179,7 @@ class RS485(minimalmodbus.Instrument):
     
     
     def read_stop(self):
-        pass
+        self.instrument.
     
     
     def single(self):
@@ -188,8 +189,7 @@ class RS485(minimalmodbus.Instrument):
     
     def loop(self):
         pass
-        
-    
+ 
         
     
 

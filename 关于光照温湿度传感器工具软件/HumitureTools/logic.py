@@ -14,15 +14,19 @@ from PyQt5 import QtCore,QtGui,QtWidgets
 import sys
 import binascii
 
+#from Communcate import Communcate
+#from Communcate_1 import sensorInstrument
 from Communcate import Communcate
-from Communcate_1 import sensorInstrument
-from DataBase import DataBase
+
+
 import time
 
 
 #信号调用
 class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
+    
     def __init__(self):
+        
         super(signal_ui,self).__init__()
         self.ser = serial.Serial()
         self.setupUi(self)
@@ -32,9 +36,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Circle_pushButton.clicked.connect(self.circle)
         self.Stop_pushButton.clicked.connect(self.stop)
         
-    def portOpen(self):
-        self.Communcate.open()
-       
+    
     
     def portClose(self):
         self.Communcate.close()
@@ -53,7 +55,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.ser.cancel_read()
         self.Show_label.setText('serial read is cancel')
       
-
+    
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()

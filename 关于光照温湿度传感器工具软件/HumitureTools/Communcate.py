@@ -1,222 +1,220 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar 15 15:52:00 2019
+Created on Tue Mar 19 15:46:25 2019
 
 @author: Gehaha
 """
-
-import binascii
-import serial
-import struct
-import time,sys
-import minimalmodbus
 import crcmod
- 
+import minimalmodbus
+import serial
 from Ui import Ui_MainWindow
 from PyQt5 import QtCore,QtGui,QtWidgets
 
-
-instrument = minimalmodbus.Instrument('COM1',1)
-instrument.serial.baudrate = 9600
-instrument.serial.bytesize = 8
-instrument.serial.parity = serial.PARITY_NONE
-instrument.serial.stopbits = 1
-instrument.address = 1
-instrument.mode = minimalmodbus.MODE_RTU
-minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL = True
-
-
 class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
-    __instance = None
-    __isFirstInit = False
-    
-    def __new__(cls):
-        if not cls.__instance:
-           
-            Communcate.__instance = super().__new__(cls)
-        return cls.__instance
     
     def __init__(self):
-        super(Communcate,self).__init__()
-        if not self.__isFirstInit:
-            self.__connectState = False
-            self.ser = serial.Serial()
-        else:
-            pass
-        self.setupUi(self)
+        minimalmodbus.Instrument.__init__(self,'COM4',1)
         
+        self.instrument = minimalmodbus.Instrument('COM4',1)
+        self.instrument.serial.baudrate = 9600
+        self.instrument.serial.bytesize = 8
+        self.instrument.serial.parity = minimalmodbus.serial.PARITY_NONE
+        self.instrument.serial.stopbits = 1
+        self.instrument.serial.timeout = 0.5
+        self.instrument.debug = False 
         
-    def open(self):
+        # 串口在每次调用后关闭。
+        self.instrument.close_port_after_each_call = True
         
-        if self.ser.open():
-            self.Show_label.setText("串口已打开！")
-        else:
-            self.Show_label.setText("串口未打开，请打开串口！")
+        #如果您的RS-485适配器启用了本地echo，则将其设置为True。
+        #然后发送的消息将立即出现在RS-485适配器的接收行。
+        #然后MinimalModbus将在从从属节点读取数据之前读取并丢弃这些数据。默认为False
+        self.instrument.handle_local_echo = True
+        
+        #如果这是假的，串行端口将读取到超时，而不是只读取特定的字节数。默认值为True。
+        self.instrument.precalculate_read_size = True
+        
+    
+    """   
+    #使用_communication()方法。
+    #使用_embedPayload()函数生成请求，
+    #使用_extractPayload()函数完成响应的解析。
+    """ 
+         
+           
+    #构建一个请求命令从地址、功能码、和数据
+    def slaveEmbedPayload(self):
+        self.request_data = ''
+        # 从slaveaddress、功能号和有效负载数据构建一个请求
+        slaveaddress = 0x01
+        mode = 'rtu'
+        functioncode = 0x03
+        #要发送到从服务器的字节字符串
+        payloaddata = '\x00\x00\x00\x04'
+        self.request_data = minimalmodbus._embedPayload(slaveaddress,mode,functioncode,payloaddata)        
+        return self.request_data
 
-    
-    def closed(self):
-        if self.ser.closed():
-            self.Show_label.setText("串口已关闭！")
-        else:
-            self.Show_label.setText("串口未关闭,请关闭串口！")
-            
-            
-    def send(self):
-        self.write(msg.data())
+    # 发送到pySerial和从pySerial发送的信息应该是字节类型的
+    def slaveCommunicate(self):
+        # request,number_of_bytes_read
+        #要发送给从服务器的原始请求。request
+        # recieve_data 从slave即设备发回来的数据
+        self.raw_data = ''
+        self.send_data= self.request_data  
+        number_of_bytes_to_read = 13
         
-    def write(self,data):
-        self.ser.write(data)
+        try:    
+            self.raw_data = self.instrument._communicate(self.send_data,number_of_bytes_to_read)    
+         #   return recieve_data
+         #注意答案可能有奇怪的ASCII控制符号，这使得很难在print中打印它(有点混乱)。
+         # 使用repr()使字符串可打印(显示控制符号的ASCII值)。
+            if self.raw_data[0] == '\x01':
+                return self.raw_data
+            else:
+                print('The response data is wrong')
+                 
+        except ValueError :
+           pass
+   
+
+    #Convert a byte string to a hex encoded string, with spaces for easier reading.
+    #将字节字符串转换为十六进制编码的字符串，并使用空格以便阅读。
+    def hexlify(self):
         
-                    
-    def read(self):
-        res_data = ()
-        while(self.ser.isOpen()):
-            size = self.ser.inWaiting()
-            if size:
-                print(size)
-                res_data = self.ser.read_all()
-                return res_data
-                self.ser.flushInput()
         
+        self.hex_data = ''        
+        self.bytestring = self.raw_data
+        self.hex_data = minimalmodbus._hexlify(self.bytestring)
+        return self.hex_data
     
-    def receive(self):
-        data = self.read()
-        print("receive data",data)
-        msg = DataPack()
-        msg.setData(data)
-        return msg
     
+        
+    def get_illuminance(self):
+        
+        self.illuminance_bytestring= self.hex_data[9:14]
+        #将一个双字节字符串转换为一个数值，可能会缩放它
+        self.illuminance_data =  minimalmodbus._twoByteStringToNum(self.illuminance_bytestring,
+                                                 numberOfDecimals = 0,signed = False)
+        #return self.illuminance_data
+        self.illumation_lineEdit.setText(self.illuminance_data)
+        
+        
        
-    """
-     
-        num = 0
-        if size:
-            data_receive = self.ser.read_all()
-            self.Show_label.setText("正在接收数据...")
-            self.Recieve_plainTextEdit.append(data_receive.decode()
-            
-        else:
-            self.Recieve_plainTextEdit.append(binascii.b2a_hex(data_receive).decode())
-        self.Recieve_plainTextEdit.moveCursor(QtGui.QTextCursor.End)
-        self.ser.flushInput()
-        num += 1
-        self.Show_label.setText("接收：" + str(num))
-    """    
-    # 发送请求  
-    """
+    def get_temperature(self):
+        self.temperature_bytestring = self.hex_data[14:20]
+        self.temperature_data = minimalmodbus._twoByteStringToNum(self.illuminance_bytestring,
+                                                 numberOfDecimals = 2,signed = False)
+        self.Temp_lineEdit.setText(self.temperature_data)
+        
+        
+    
+    
+    def get_humidity(self):
+        self.humidity_bytestring = self.hex_data[20:26]    
+        self.humidity_data = minimalmodbus._twoByteStringToNum(self.humidity_bytestring,
+                                                 numberOfDecimals = 2,signed = False)
+        
+        self.Humidity_lineEdit.setText(self.humidity_data)
+    
+        
+    def get_windspeed(self):
+        self.windspeed_bytestring = self.hex_data[26:31]
+        self.windspeed_data = minimalmodbus._twoByteStringToNum(self.windspeed_data,
+                                                 numberOfDecimals = 0,signed = False)
+       
+        self.Airspped_lineEdit.setText(self.windspeed_data)
+    
+    
+    def portClose(self):
+        pass
+    
+      
+    def read_stop(self):
+        pass
+    
+    
     def send(self):
-        
-        self.instrument.read_register(3,1)
-    """
-    
-    
-# CRC校验   
-    def CalCRC16(self,data,length):
-        
-        crc = 0xFFFF
-        if length == 0:
-            length = 1
-            
-        # for j in data,crc ^= j
-        j = 0
-        while length != 0 :
-            crc ^= list.__getitem__(data,j)
-            #print('j = 0x%02x,length = 0x%02x,crc = 0x%04x' %(j,length,crc))
-            for i in range(0,8):
-                if crc &1:
-                    crc >>= 1
-                    crc ^= 0xA001
-                else:
-                    crc >>= 1
-            length -= 1
-            j += 1
-            # if length == 0
-            # break
-        return crc
-    
+        self.slaveEmbedPayload()
         
     
-    def CheckCRC(self,data,length,crctype):
-        
-        if length <3:
-            print('The data len(%d) is less than 3 !!!',length)
-            return 0
-        crc_res = 0
-        tmp = [0,0,0,0]
-        if crctype == 0:
-            crc_res = CalCRC16(data,length-2)
-            tmp[0] = crc_res & 0xFF
-            tmp[1] = (crc_res >> 8) & 0xFF
-            
-            if data[length-2] == tmp[0] and data[length-1] == tmp[1]:
-                return 1
-        elif crctype == 1:
-            print('CRC32 is not support')
-            return 0
-        
-        
-        def  performCommand(self,functioncode,paylaodToSlave):
-            
-            checkFunctioncode(functioncode,None)
-            
-        
-# 测试用
-if __name__ == '__main__':
-    crc16 = crcmod.mkCrcFun(0x18005,initCrc = 0xFFFF,REV = True,xorOut = 0x0000)
-    crc_array = b'0xFE 0XFD'
-    crc_calc = crc16(crc_array)
     
-    a= hex(crc_calc)
-    print(crc_calc,a)
+    def loop(self):
+        pass
+        
     
-    crc_value = [0x01, 0x04, 0x13, 0x87, 0x00, 0x30]
-    crc_transformation = CalCRC16(crc_value, len(crc_value))
-    crc_calculation = hex(crc_transformation)
-    # print('crc_calculation:',crc_calculation)
-    tasd = [0x00, 0x00]
-    tasd[0] = crc_transformation & 0xFF
-    tasd[1] = (crc_transformation >> 8) & 0xFF
-    H = hex(tasd[0])
-    L = hex(tasd[1])
-    H_value = int(H, 16)
-    L_value = int(L, 16)
-    crc_value.append(H_value)
-    crc_value.append(L_value)
-    print(crc_value)  # calculation value   CRC
+"""
 
-    # ========================================================
-    print('\n')
-    # crc_value2 = [0x01, 0x04, 0x13, 0x87, 0x00, 0x30,0x44,0xB3]
-    # print('crc_value2:',crc_value2)
-    # crc_cheak=CheckCRC(crc_value2,len(crc_value2),0)
+ #从响应中提取有效数据部分
+    def extractPayload(self):        
+        #来自于相应的原始字符串        
+        response = self.slaveCommunicate.raw_data
+        slaveaddress = 0x01
+        mode = 'MODE_RTU'
+        functioncode = 0x03
+                
+        #响应字符串的有效负载部分,接收到的响应格式应该是:* 
+        #RTU模式:slaveaddress byte + functioncode byte + payloaddata + CRC(两个字节)
+        try:            
+            payload_data = minimalmodbus._extractPayload(response,slaveaddress,mode,functioncode)
+            return payload_data
+        # payload_data 包括返回额字节数，和采集到的温湿度数据共9个字节
+        except ValueError:
+            print('there is any problem with received address,functioncode,crc')
+    
+    
+   
+     #执行带有功能码的的命令。
+    def performCommand(self):
+        
+        functioncode = 0x03
+        # 要传输给slave的数据(将嵌入slaveaddress、CRC等),是字符串
+        payloadToSlave(str) = '\x00\x00\x00\x04'
+        
+        extracted_data = self.instrument._performCommand(functioncode,payloadToSlave)
+        
+        #从slave(字符串)提取的数据有效负载。它已被删除CRC等。
+        #有效数据段，包括byte counte + data 共9个字节    
+        return extracted_data            
+    
+  
+    #Convert a byte string to a hex encoded string, with spaces for easier reading.
+    #将字节字符串转换为十六进制编码的字符串，并使用空格以便阅读。
+    def hexlify(self):
+        
+        bytestring = ''
+        minimalmodbus._hexlify(bytestring,insert_spaces = True)
 
-    crc_check = CheckCRC(crc_value, len(crc_value), 0)
-    if crc_check == 1:
-        print('Right')
-    else:
-        print('wrong')
+                
+    #将一个双字节字符串转换为一个数值，可能会缩放它。用来转换    
+    def twoByteStringToNum(self):        
+        num = []
+        num =  minimalmodbus._twoByteStringToNum(bytestring,numberOfDecimals = 0,signed = False)
+        return num
 
-    print(crc_check)  # check calculation value
+   
+     
+    
+    def unpack(self):
+        formatstring = 'formatstring (str): String for the packing. See the struct module for details.'
+        packed = 'The bytestring to be unpacked.'        
+        # A value. The type depends on the formatstring.
+        data = minimalmodbus._unpack(formatstring,packed)
+        return data
+    
+    
+    
+    
+    def CalcuCrc(self):       
+        #input string 是接收到的数据(不包含crc),
+        #return 一个双字节CRC字符串，低位的字节在前。       
+        inputstring = ''
+        calCRC_string =  minimalmodbus._calculateCrcString(inputstring)
+        return calCRC_string
+    
+    
+        
+"""   
+        
+    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
