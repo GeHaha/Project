@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+import logging
+logging.basicConfig(level = logging.DEBUG,format = '%(asctime)s - %(levelname)s- %(message)s')
+
 """
 Created on Thu Dec  6 15:08:58 2018
 
@@ -34,7 +38,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Close_pushButton.clicked.connect(self.portClose)
         self.Single_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
-        self.Stop_pushButton.clicked.connect(self.stop)
+        self.Stop_pushButton.clicked.connect(self.stopRead)
         
     
     
@@ -43,18 +47,20 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
     
         
     def single(self,msg):
-        self.Communcate.send()
-        self.Show_label.setText("one send")                           
-        
+        self.Communcate.read_data()
+        self.Show_label.setText("命令已发送！")
+                                
+       
     def circle(self,msg):
         while True:
-            self.Communcate.send()
+            self.Communcate.read_data()
             time.sleep(int(self.Time_lineEdit.currentText()))
     
-    def stop(self):
-        self.ser.cancel_read()
+    def stopRead(self):
+        self.Communcate.read_stop()
         self.Show_label.setText('serial read is cancel')
       
+
     
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

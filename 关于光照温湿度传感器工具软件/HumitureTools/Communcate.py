@@ -9,10 +9,17 @@ import minimalmodbus
 import serial
 from Ui import Ui_MainWindow
 from PyQt5 import QtCore,QtGui,QtWidgets
+import time
 
 class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
     
+
+    
+    
     def __init__(self):
+        super(Communcate,self).__init__()
+
+        
         minimalmodbus.Instrument.__init__(self,'COM4',1)
         
         self.instrument = minimalmodbus.Instrument('COM4',1)
@@ -20,19 +27,30 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         self.instrument.serial.bytesize = 8
         self.instrument.serial.parity = minimalmodbus.serial.PARITY_NONE
         self.instrument.serial.stopbits = 1
-        self.instrument.serial.timeout = 0.5
-        self.instrument.debug = False 
+        self.instrument.serial.timeout = 2
+        self.instrument.debug = True
         
         # 串口在每次调用后关闭。
-        self.instrument.close_port_after_each_call = True
+       # self.instrument.close_port_after_each_call = False
+        
         
         #如果您的RS-485适配器启用了本地echo，则将其设置为True。
         #然后发送的消息将立即出现在RS-485适配器的接收行。
         #然后MinimalModbus将在从从属节点读取数据之前读取并丢弃这些数据。默认为False
-        self.instrument.handle_local_echo = True
+        self.instrument.handle_local_echo =False
+        
+        
+        
         
         #如果这是假的，串行端口将读取到超时，而不是只读取特定的字节数。默认值为True。
         self.instrument.precalculate_read_size = True
+        
+        """        
+        self.request_data = ''
+        self.send_data = ''
+        self.raw_data = ''
+        self.hex_data = ''
+        """
         
     
     """   
@@ -44,6 +62,7 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
            
     #构建一个请求命令从地址、功能码、和数据
     def slaveEmbedPayload(self):
+        
         self.request_data = ''
         # 从slaveaddress、功能号和有效负载数据构建一个请求
         slaveaddress = 0x01
@@ -51,169 +70,112 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         functioncode = 0x03
         #要发送到从服务器的字节字符串
         payloaddata = '\x00\x00\x00\x04'
-        self.request_data = minimalmodbus._embedPayload(slaveaddress,mode,functioncode,payloaddata)        
+        #self.request_data = minimalmodbus._embedPayload(slaveaddress,mode,functioncode,payloaddata)        
+        #return self.request_data
+        self.request_data =  minimalmodbus._embedPayload(slaveaddress,mode,functioncode,payloaddata)
         return self.request_data
-
+    
+    
     # 发送到pySerial和从pySerial发送的信息应该是字节类型的
     def slaveCommunicate(self):
         # request,number_of_bytes_read
         #要发送给从服务器的原始请求。request
         # recieve_data 从slave即设备发回来的数据
         self.raw_data = ''
-        self.send_data= self.request_data  
-        number_of_bytes_to_read = 13
+        self.send_data= self.slaveEmbedPayload()
+        
+        #self.send_data = Communcate.slaveEmbedPayload()
+        
+      #  number_of_bytes_to_read = 13
         
         try:    
-            self.raw_data = self.instrument._communicate(self.send_data,number_of_bytes_to_read)    
+            self.raw_data = self.instrument._communicate(self.send_data,13)    
          #   return recieve_data
          #注意答案可能有奇怪的ASCII控制符号，这使得很难在print中打印它(有点混乱)。
          # 使用repr()使字符串可打印(显示控制符号的ASCII值)。
             if self.raw_data[0] == '\x01':
+                #return self.raw_data
                 return self.raw_data
+                
             else:
-                print('The response data is wrong')
-                 
+                return self.slaveCommunicate()
+            
+                                 
         except ValueError :
            pass
    
-
-    #Convert a byte string to a hex encoded string, with spaces for easier reading.
-    #将字节字符串转换为十六进制编码的字符串，并使用空格以便阅读。
-    def hexlify(self):
-        
-        
-        self.hex_data = ''        
-        self.bytestring = self.raw_data
-        self.hex_data = minimalmodbus._hexlify(self.bytestring)
-        return self.hex_data
-    
-    
         
     def get_illuminance(self):
         
-        self.illuminance_bytestring= self.hex_data[9:14]
+       # self.illuminance_bytestring= self.hex_data[9:14]
+       
+        self.receive_data = self.slaveCommunicate()       
+        #self.illuminance_bytestring = self.receive_data[3:5]
+        self.illuminance_bytestring = self.receive_data
         #将一个双字节字符串转换为一个数值，可能会缩放它
-        self.illuminance_data =  minimalmodbus._twoByteStringToNum(self.illuminance_bytestring,
+        self.illuminance_data =  minimalmodbus._twoByteStringToNum(self.illuminance_bytestring[3:5],
                                                  numberOfDecimals = 0,signed = False)
         #return self.illuminance_data
-        self.illumation_lineEdit.setText(self.illuminance_data)
-        
+       # self.illumation_lineEdit.setText(self.illuminance_data)
+        print("illuminance:",self.illuminance_data)
         
        
     def get_temperature(self):
-        self.temperature_bytestring = self.hex_data[14:20]
-        self.temperature_data = minimalmodbus._twoByteStringToNum(self.illuminance_bytestring,
+        self.receive_data = self.slaveCommunicate()
+        #self.temperature_bytestring = self.receive_data[5:7]
+        self.temperature_bytestring = self.receive_data
+        self.temperature_data = minimalmodbus._twoByteStringToNum(self.illuminance_bytestring[5:7],
                                                  numberOfDecimals = 2,signed = False)
-        self.Temp_lineEdit.setText(self.temperature_data)
+        #self.Temp_lineEdit.setText(self.temperature_data)
+        print("temperature:",self.temperature_data)
         
         
     
     
     def get_humidity(self):
-        self.humidity_bytestring = self.hex_data[20:26]    
-        self.humidity_data = minimalmodbus._twoByteStringToNum(self.humidity_bytestring,
+        self.receive_data = self.slaveCommunicate()
+        #self.humidity_bytestring = self.receive_data[7:9]  
+        self.humidity_bytestring = self.receive_data
+        self.humidity_data = minimalmodbus._twoByteStringToNum(self.humidity_bytestring[7:9],
                                                  numberOfDecimals = 2,signed = False)
         
-        self.Humidity_lineEdit.setText(self.humidity_data)
-    
+       # self.Humidity_lineEdit.setText(self.humidity_data)
+        print("humidity:",self.humidity_data) 
         
     def get_windspeed(self):
-        self.windspeed_bytestring = self.hex_data[26:31]
-        self.windspeed_data = minimalmodbus._twoByteStringToNum(self.windspeed_data,
+        self.receive_data = self.slaveCommunicate()
+       # self.windspeed_bytestring = self.receive_data[9:11]
+        self.windspeed_bytestring = self.receive_data
+        self.windspeed_data = minimalmodbus._twoByteStringToNum(self.windspeed_bytestring[9:11],
                                                  numberOfDecimals = 0,signed = False)
-       
-        self.Airspped_lineEdit.setText(self.windspeed_data)
-    
-    
-    def portClose(self):
-        pass
-    
       
-    def read_stop(self):
-        pass
+        #self.Airspped_lineEdit.setText(self.windspeed_data)
+        print("windspeed_data:" ,self.windspeed_data)
+        
+    
+    def close(self):
+        self.instrument.serial.close()
     
     
     def send(self):
-        self.slaveEmbedPayload()
+        self.slaveEmbedPayload() 
         
-    
-    
-    def loop(self):
-        pass
         
-    
-"""
+    def read_stop(self):
+        self.instrument.serial.cancel_read()
+        
+    def read_data(self):
+        self.get_illuminance()
+        self.get_humidity()
+        self.get_temperature()
+        self.get_windspeed()
+        
 
- #从响应中提取有效数据部分
-    def extractPayload(self):        
-        #来自于相应的原始字符串        
-        response = self.slaveCommunicate.raw_data
-        slaveaddress = 0x01
-        mode = 'MODE_RTU'
-        functioncode = 0x03
-                
-        #响应字符串的有效负载部分,接收到的响应格式应该是:* 
-        #RTU模式:slaveaddress byte + functioncode byte + payloaddata + CRC(两个字节)
-        try:            
-            payload_data = minimalmodbus._extractPayload(response,slaveaddress,mode,functioncode)
-            return payload_data
-        # payload_data 包括返回额字节数，和采集到的温湿度数据共9个字节
-        except ValueError:
-            print('there is any problem with received address,functioncode,crc')
     
     
-   
-     #执行带有功能码的的命令。
-    def performCommand(self):
-        
-        functioncode = 0x03
-        # 要传输给slave的数据(将嵌入slaveaddress、CRC等),是字符串
-        payloadToSlave(str) = '\x00\x00\x00\x04'
-        
-        extracted_data = self.instrument._performCommand(functioncode,payloadToSlave)
-        
-        #从slave(字符串)提取的数据有效负载。它已被删除CRC等。
-        #有效数据段，包括byte counte + data 共9个字节    
-        return extracted_data            
-    
-  
-    #Convert a byte string to a hex encoded string, with spaces for easier reading.
-    #将字节字符串转换为十六进制编码的字符串，并使用空格以便阅读。
-    def hexlify(self):
-        
-        bytestring = ''
-        minimalmodbus._hexlify(bytestring,insert_spaces = True)
 
-                
-    #将一个双字节字符串转换为一个数值，可能会缩放它。用来转换    
-    def twoByteStringToNum(self):        
-        num = []
-        num =  minimalmodbus._twoByteStringToNum(bytestring,numberOfDecimals = 0,signed = False)
-        return num
+    
 
-   
-     
-    
-    def unpack(self):
-        formatstring = 'formatstring (str): String for the packing. See the struct module for details.'
-        packed = 'The bytestring to be unpacked.'        
-        # A value. The type depends on the formatstring.
-        data = minimalmodbus._unpack(formatstring,packed)
-        return data
-    
-    
-    
-    
-    def CalcuCrc(self):       
-        #input string 是接收到的数据(不包含crc),
-        #return 一个双字节CRC字符串，低位的字节在前。       
-        inputstring = ''
-        calCRC_string =  minimalmodbus._calculateCrcString(inputstring)
-        return calCRC_string
-    
-    
-        
-"""   
         
     
 
