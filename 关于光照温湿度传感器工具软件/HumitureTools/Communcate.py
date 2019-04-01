@@ -166,9 +166,13 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         
     def read_data(self):
         self.get_illuminance()
+        self.illumation_lineEdit.setText(self.illuminance_data)
         self.get_humidity()
+        self.Humidity_lineEdit.setText(self.humidity_data)
         self.get_temperature()
+        self.Temp_lineEdit(self.temperature_data)
         self.get_windspeed()
+        self.Airspped_lineEdit(self.windspeed_data)
         
 
     

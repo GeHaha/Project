@@ -49,6 +49,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
     def single(self,msg):
         self.Communcate.read_data()
         self.Show_label.setText("命令已发送！")
+        
                                 
        
     def circle(self,msg):
