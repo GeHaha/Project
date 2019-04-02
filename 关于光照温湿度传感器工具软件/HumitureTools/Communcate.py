@@ -118,7 +118,8 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         #return self.illuminance_data
        # self.illumation_lineEdit.setText(self.illuminance_data)
         print("illuminance:",self.illuminance_data)
-        
+        return self.illuminance_data
+    
        
     def get_temperature(self):
         self.receive_data = self.slaveCommunicate()
@@ -128,7 +129,7 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
                                                  numberOfDecimals = 2,signed = False)
         #self.Temp_lineEdit.setText(self.temperature_data)
         print("temperature:",self.temperature_data)
-        
+        return self.temperature_data
         
     
     
@@ -141,7 +142,9 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         
        # self.Humidity_lineEdit.setText(self.humidity_data)
         print("humidity:",self.humidity_data) 
-        
+        return self.humidity_data
+    
+    
     def get_windspeed(self):
         self.receive_data = self.slaveCommunicate()
        # self.windspeed_bytestring = self.receive_data[9:11]
@@ -151,7 +154,8 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
       
         #self.Airspped_lineEdit.setText(self.windspeed_data)
         print("windspeed_data:" ,self.windspeed_data)
-        
+        return self.windspeed_data
+    
     
     def close(self):
         self.instrument.serial.close()
