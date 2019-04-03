@@ -10,7 +10,12 @@ import communcate
 
 class dbConnect:
     
-    def __init__(self):
+    def __init__(self,i,t,h,w):
+        self.illuminance = i
+        self.temperature = t
+        self.humidity = h
+        self.windspeed = w
+        
         self.conn = None
         self.cursor = None
         
@@ -20,10 +25,10 @@ class dbConnect:
             self.cursor = self.conn.cursor()
             self.cursor.execute('''CREATE TABLE humiture
                                 (Time        TEXT    NOT NULL,
-                                Illuminance  INT    NOT NULL,
-                                Temperature  FLOAT  NOT NULL,
-                                Humidity     FLOAT  NOT NULL,
-                                windspeed    FLOAT  NOT NULL);
+                                Illuminance  INTEGER   NOT NULL,
+                                Temperature  REAL  NOT NULL,
+                                Humidity     REAL  NOT NULL,
+                                windspeed    REAL  NOT NULL);
                                 ''')
             return self.cursor
         except Exception as e:
@@ -34,16 +39,37 @@ class dbConnect:
         self.cursor.close()
         self.conn.close()
    
-
-    def insert(self,time,illuminance,temperature,humidity,windspeed):
+    
+    def dataInsertDb(self):
         self.fetch_data = communcate.Communcate()
         self.fetch_illuminance = self.fetch_data.get_illuminance()        
-        time = self.fetch_illuminance
+        self.illuminance = self.fetch_illuminance
         
+        self.fetch_temperature = self.fetch_data.get_temperature()
+        self.temperature = self.fetch_temperature
         
+        self.fetch_humidity = self.fetch_data.get_humidity()
+        self.humidity = self.fetch_humidity
+        
+        self.fetch_windspeed = self.fetch_data.get_windspeed()
+        self.windspeed = self.fetch_windspeed
+        
+        return self.illuminance,self.temperature,self.humidity,self.windspeed
+    
+    
+    
+    def insert(self,time,illuminance,temperature,humidity,windspeed):
+        self.data = self.dataInsertDb()
+        self.illuminance = self.data[0]
+        self.temperature = self.data[1]
+        self.humidity = self.data[2]
+        self.windspeed = self.data[3]
+         
+                
         self.cursor = self.conn.connect()
         sql = "INSERT INRO humiture (Time,Illuminance,Temperature,Humidity,Windspeed)\
-        VALUES(time,illuminance,temperature,humidity,windspeed)"
+        VALUES(time,self.illuminance,self.temperature,self.humidity,self.windspeed)"
+        
         self.cursor.execute(sql)
         
 
