@@ -17,6 +17,7 @@ import serial.tools.list_ports
 from PyQt5 import QtCore,QtGui,QtWidgets
 import sys
 import binascii
+import dbconnect
 
 #from Communcate import Communcate
 #from Communcate_1 import sensorInstrument
@@ -46,7 +47,7 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Communcate.close()
     
         
-    def single(self,msg):
+    def single(self,msg):       
         self.Communcate.read_data()
         self.Show_label.setText("命令已发送！")
         
@@ -55,12 +56,15 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
     def circle(self,msg):
         while True:
             self.Communcate.read_data()
-            time.sleep(int(self.Time_lineEdit.currentText()))
+            #time.sleep(int(self.Time_lineEdit.currentText()))
+        else:
+            return 
+        
     
     def stopRead(self):
         self.Communcate.read_stop()
         self.Show_label.setText('serial read is cancel')
-      
+        
 
     
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ Created on Tue Apr  2 19:54:52 2019
 """
 
 import sqlite3
-import communcate
+import Communcate
 
 class dbConnect:
     
@@ -41,7 +41,7 @@ class dbConnect:
    
     
     def dataInsertDb(self):
-        self.fetch_data = communcate.Communcate()
+        self.fetch_data = Communcate.Communcate()
         self.fetch_illuminance = self.fetch_data.get_illuminance()        
         self.illuminance = self.fetch_illuminance
         

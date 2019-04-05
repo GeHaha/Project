@@ -10,6 +10,7 @@ import serial
 from Ui import Ui_MainWindow
 from PyQt5 import QtCore,QtGui,QtWidgets
 import time
+import dbconnect
 
 class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
     
@@ -170,15 +171,26 @@ class Communcate(QtWidgets.QMainWindow,Ui_MainWindow):
         
     def read_data(self):
         self.get_illuminance()
-        self.illumation_lineEdit.setText(self.illuminance_data)
-        self.get_humidity()
-        self.Humidity_lineEdit.setText(self.humidity_data)
-        self.get_temperature()
-        self.Temp_lineEdit(self.temperature_data)
-        self.get_windspeed()
-        self.Airspped_lineEdit(self.windspeed_data)
+       # self.illumation_lineEdit.setText(self.illuminance_data)
+        print("光照度：",self.illuminance_data)
         
-
+        self.get_humidity()
+        print("湿度：",self.humidity_data)
+        #self.Humidity_lineEdit.setText(self.humidity_data)
+        self.get_temperature()
+        print("温度：",self.temperature_data)
+        
+        #self.Temp_lineEdit(self.temperature_data)
+        self.get_windspeed()
+        print("风速：",self.windspeed_data)
+        #self.Airspped_lineEdit(self.windspeed_data)
+        
+    
+    def fetchDataBase(self):
+        self.get_data = dbconnect.dbConnect()
+        self.data = self.get_data.fetch()
+        
+    
     
     
 
