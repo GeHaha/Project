@@ -17,13 +17,11 @@ from PyQt5 import QtCore,QtGui,QtWidgets
 import sys
 import binascii
 import dbconnect
-
-#from Communcate import Communcate
-#from Communcate_1 import sensorInstrument
-from Communcate import Communcate
-
-
 import time
+from Communcate import Communcate
+import dbconnect
+from dataPack import dataPack
+
 
 
 #信号调用
@@ -34,34 +32,40 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         super(signal_ui,self).__init__()
         self.ser = serial.Serial()
         self.setupUi(self)
-        self.Communcate= Communcate()        
-        self.Close_pushButton.clicked.connect(self.portClose)
-        self.Single_pushButton.clicked.connect(self.single) 
+        self.Communcate= Communcate() 
+        self.dataPack = dataPack()
+        
+        self.Open_pushButton.clicked.connect(self.Open)
+        self.Close_pushButton.clicked.connect(self.Close)
+        self.Signal_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
         self.Stop_pushButton.clicked.connect(self.stopRead)
-        
+        #self.Curve_pushButton.clicked.connect(self.)
     
+    def Open(self):
+        self.Communcate.openPort()
+        self.Show_label.setText("Open port success!")    
     
-    def portClose(self):
-        self.Communcate.close()
+    def Close(self):
+        self.Communcate.closePort()
     
         
     def single(self,msg):       
-        self.Communcate.read_data()
-        self.Show_label.setText("命令已发送！")
+        self.Communcate.requestData()()   
+        self.illumation_lineEdit.setText(self.dataPack.illuminance())
+        self.Show_label.setText("Request to be send！")
         
-                                
-       
+        
     def circle(self,msg):
         while True:
-            self.Communcate.read_data()
+            self.Communcate.requestData()
             #time.sleep(int(self.Time_lineEdit.currentText()))
         else:
             return 
-        
+      
     
     def stopRead(self):
-        self.Communcate.read_stop()
+        self.Communcate.pause()
         self.Show_label.setText('serial read is cancel')
         
 

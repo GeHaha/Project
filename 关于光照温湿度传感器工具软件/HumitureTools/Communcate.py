@@ -26,6 +26,7 @@ class Communcate():
         self.__instrument.debug = False
         self.__instrument.handle_local_echo =False
         self.__instrument.precalculate_read_size = True
+        
     
     def closePort(self):
         self.__instrument.serial.close()
@@ -40,8 +41,8 @@ class Communcate():
         
         self.__request_data = ''
         # 从slaveaddress、功能号和有效负载数据构建一个请求
-        slaveaddress = address
-        mode = mode
+        slaveaddress = 0x01
+        mode = 'rtu'
         functioncode = function_code
         #要发送到从服务器的字节字符串
         payloaddata = '\x00\x00\x00\x04'
@@ -71,17 +72,19 @@ class Communcate():
         
         
 
-def test():  
-    sensorCommuncate = Communcate()
-    sensorCommuncate.openPort()
-    sensorCommuncate.setRequstConfig(0x01, 'rtu', 0x03)
-    sensorCommuncate.requestData()
-    
-    sensorCommuncate.printData()
-
-
-while True:   
-    test()  
+# 
+# def test():  
+#     sensorCommuncate = Communcate()
+#     sensorCommuncate.openPort()
+#     sensorCommuncate.setRequstConfig(0x01, 'rtu', 0x03)
+#     sensorCommuncate.requestData()
+#     
+#     sensorCommuncate.printData()
+# 
+# 
+# while True:   
+#     test()  
+# 
 
     
 
