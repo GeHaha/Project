@@ -226,9 +226,9 @@
     <widget class="QPushButton" name="Circle_pushButton">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>124</x>
        <y>70</y>
-       <width>75</width>
+       <width>71</width>
        <height>31</height>
       </rect>
      </property>
