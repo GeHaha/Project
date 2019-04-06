@@ -11,7 +11,6 @@ Created on Thu Dec  6 15:08:58 2018
 
 import sys
 from Ui import Ui_MainWindow
-from Ui import Ui_MainWindow
 import serial
 import serial.tools.list_ports
 from PyQt5 import QtCore,QtGui,QtWidgets
