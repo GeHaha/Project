@@ -5,8 +5,11 @@ Created on Tue Apr  2 19:54:52 2019
 @author: Gehaha
 """
 
+import sys
+sys.path.append("communcate")
+
 import sqlite3
-import Communcate
+from communcate import Communcate
 
 class dbConnect:
     
