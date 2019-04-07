@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 19 15:46:25 2019
 
-@author: Gehaha
-"""
 import crcmod
 import minimalmodbus
 from data_pack import DataPack
@@ -59,7 +55,7 @@ class Communcate():
         data = self.__instrument._communicate(self.__request_data, 13)
         
         if (data[0] == '\x01'):
-            self.__package.setData(data)
+            self.__package.set_data(data)
         else:
             self.request_data()
 

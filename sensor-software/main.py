@@ -14,17 +14,15 @@ sys.path.append("communcate")
 sys.path.append("ui")
 sys.path.append("data_base")
 
-from Ui import Ui_MainWindow
-import serial
-import serial.tools.list_ports
-from PyQt5 import QtCore,QtGui,QtWidgets
-import sys
-import binascii
-import dbconnect
-import time
 from communcate import Communcate
-import dbconnect
 from data_pack import DataPack
+
+from ui import Ui_MainWindow
+from PyQt5 import QtCore,QtGui,QtWidgets
+
+import serial.tools.list_ports
+import binascii
+import time
 
 
 
@@ -74,7 +72,6 @@ class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
         
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
     ui = signal_ui()
     ui.show()
     sys.exit(app.exec_())
