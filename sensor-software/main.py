@@ -10,87 +10,83 @@ Created on Thu Dec  6 15:08:58 2018
 """
 
 import sys
+sys.path.append("communcate")
+sys.path.append("ui")
+sys.path.append("data_base")
+
 from Ui import Ui_MainWindow
 import serial
 import serial.tools.list_ports
 from PyQt5 import QtCore,QtGui,QtWidgets
 
 import binascii
-import dbconnect
+
 import time
-from Communcate import Communcate
-import dbconnect
-from dataPack import dataPack
+from communcate import Communcate
+
+from data_pack import DataPack
 
 
 
-#信号调用
-class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
+# the name is too bad
+class SignalUi(QtWidgets.QMainWindow,Ui_MainWindow):
     
     def __init__(self):
         
-        super(signal_ui,self).__init__()
+        super(SignalUi,self).__init__()
         self.ser = serial.Serial()
         self.setupUi(self)
+
         self.sensorCommuncate= Communcate() 
-        self.dataPack = dataPack()
+        self.dataPack = DataPack()
+
         
-        self.Open_pushButton.clicked.connect(self.Open)
-        self.Close_pushButton.clicked.connect(self.Close)
+        self.Open_pushButton.clicked.connect(self.port_open)
+        self.Close_pushButton.clicked.connect(self.port_close)
         self.Signal_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
-        self.Stop_pushButton.clicked.connect(self.stopRead)
+        self.Stop_pushButton.clicked.connect(self.stop_read)
         #self.Curve_pushButton.clicked.connect(self.)
     
-    def Open(self):
-        self.sensorCommuncate.openPort()
+    def port_open(self):
+        self.sensorCommuncate.open_port()
         self.Show_label.setText("Open port success!")    
     
-    def Close(self):
-        self.sensorCommuncate.closePort()
-    
-    
-    
+    def port_close(self):
+        self.sensorCommuncate.close_port()
+
         
     def single(self,msg):  
-        self.sensorCommuncate.setRequstConfig(0x01,'rtu',0x03)
-        self.sensorCommuncate.requestData()
-        self.showData()
-        
-#        self.illumation_lineEdit.setText(str(self.dataPack.illuminance()))
-#        self.Temp_lineEdit.setText(str(self.dataPack.temperature()))
-#        self.Humidity_lineEdit.setText(str(self.dataPack.humidity()))
-#        self.windSpeed_lineEdit.setText(str(self.dataPack.windspeed()))
+        self.sensorCommuncate.set_modbus_config(0x01,'rtu',0x03)
+        self.sensorCommuncate.request_data()
+        self.__show_data()
         self.Show_label.setText("Request to be send！")
         
         
     def circle(self,msg):
-        while True:
-            time.sleep(int(self.Time_lineEdit.setText()))
-            self.sensorCommuncate.setRequstConfig(0x01,'rtu',0x03)
-            self.sensorCommuncate.requestData()
-            self.showData()
-            #time.sleep(int(self.Time_lineEdit.currentText()))
+        while True:           
+            self.sensorCommuncate.set_modbus_config(0x01,'rtu',0x03)
+            self.sensorCommuncate.request_data()
+            self.__show_data()
+            time.sleep(1000)
         else:
             pass
-        
-        
-    def showData(self):
-        self.illumation_lineEdit.setText(str(self.dataPack.illuminance()))
-        self.Temp_lineEdit.setText(str(self.dataPack.temperature()))
-        self.Humidity_lineEdit.setText(str(self.dataPack.humidity()))
-        self.windSpeed_lineEdit.setText(str(self.dataPack.windspeed()))
     
-    def stopRead(self):
+    def stop_read(self):
         self.sensorCommuncate.pause()
         self.Show_label.setText('serial read is cancel')
         
-
+        
+    def __show_data(self):      
+        self.illumation_lineEdit.setText(str(self.dataPack.illuminance()))
+        self.Temp_lineEdit.setText(str(self.dataPack.temperature()))
+        self.Humidity_lineEdit.setText(str(self.dataPack.humidity()))
+        self.Airspped_lineEdit.setText(str(self.dataPack.windspeed()))
     
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = signal_ui()
+    ui = SignalUi()
     ui.show()
     sys.exit(app.exec_())
  

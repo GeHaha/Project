@@ -5,10 +5,13 @@ Created on Tue Apr  2 19:54:52 2019
 @author: Gehaha
 """
 
-import sqlite3
-import Communcate
+import sys
+sys.path.append("communcate")
 
-class dbConnect:
+import sqlite3
+from communcate import Communcate
+
+class DbConnect:
     
     def __init__(self,i,t,h,w):
         self.illuminance = i
