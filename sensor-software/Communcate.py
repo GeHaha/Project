@@ -9,7 +9,7 @@ import minimalmodbus
 import dbconnect
 from dataPack import dataPack
 
-class Communcate():
+class Communcate(object):
     """
     """
     def __init__(self):
@@ -26,6 +26,7 @@ class Communcate():
         self.__instrument.debug = False
         self.__instrument.handle_local_echo =False
         self.__instrument.precalculate_read_size = True
+        print("port open")
         
     
     def closePort(self):
@@ -41,8 +42,8 @@ class Communcate():
         
         self.__request_data = ''
         # 从slaveaddress、功能号和有效负载数据构建一个请求
-        slaveaddress = 0x01
-        mode = 'rtu'
+        slaveaddress = address
+        mode = mode
         functioncode = function_code
         #要发送到从服务器的字节字符串
         payloaddata = '\x00\x00\x00\x04'
@@ -72,18 +73,18 @@ class Communcate():
         
         
 
-# 
-# def test():  
-#     sensorCommuncate = Communcate()
-#     sensorCommuncate.openPort()
-#     sensorCommuncate.setRequstConfig(0x01, 'rtu', 0x03)
-#     sensorCommuncate.requestData()
+ 
+#def test():  
+#    sensorCommuncate = Communcate()
+#    sensorCommuncate.openPort()
+#    sensorCommuncate.setRequstConfig(0x01, 'rtu', 0x03)
+#    sensorCommuncate.requestData()
 #     
-#     sensorCommuncate.printData()
+#    sensorCommuncate.printData()
 # 
 # 
-# while True:   
-#     test()  
+#while True:   
+#    test()  
 # 
 
     
