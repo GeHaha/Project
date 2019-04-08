@@ -1,68 +1,65 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Apr  7 21:42:41 2019
+Created on Mon Apr  8 10:28:25 2019
 
 @author: Gehaha
 """
 
 import sqlite3
-import os
-con = None
 
-class SetupDB(object):
+class ManageData(object):
+    db_name = "humiture.db"
+    table_name = "humiture"
     
     def __init__(self):
-        self.setup_db_con()
-        self.create_tables()
+        pass
+
+    
+    def query(self,db_name,sql,data):
+        with sqlite3.connect(db_name) as db:
+            self.cursor = db.cursor()
+            self.cursor.execute(sql,data)
+            self.ressult = self.cursor.fetchall()
+            db.commit()
+            return self.result
         
-    def __del__(self):
-        self.close_db()
         
         
-    def setup_db_con(self):
-        self.con = sqlite3.connect()
-        self.cur = self.con.cursor()
+    def show_all_data(self,db_name,table_name):
+        #show all the data of table from db
+        sql = " SELECT * FROM {0}".format(table_name)
+        return self.query(db_name,sql,())
+    
+    
         
-    def create_tables(self):
-        self.drop_tables()
-        self.create_tables()
+    def insert_data(self,db_name,table_name,time,illuminance,temperature,humidity,windspeed):
+        
+        # show all the data of table from db
+        sql = """
+            INSERT INTO {0}(Time,Illuminance,Temperature,Humidity,Windspeed)\
+            VALUES(?,?,?,?,?)""".format(table_name) 
+          
+        self.query(db_name,sql,(time,illuminance,temperature,humidity,windspeed,))
+        print('Data stored in Database')
+               
+    
+    
+    def updata_data(self,Id,db_name,table_name,time,illuminance,temperature,humidity,windspeed):
+        
+        sql = """
+                UPDATE {0} SET Time = ?,Illuminance = ?,Temperature = ?,Humidity= ?,Windspeed=?
+                WHERE ID = ? """.format(table_name)
+        self.query(db_name,sql,(time,illuminance,temperature,humidity,windspeed,Id))
+    
+  
+    
+    def delete_data(self,db_name,table_name,Id):
+        
+        sql = """
+                DELETE FROM {0} WHERE ID = ? 
+             """.format(table_name)
+        self.query(db_name,sql,(Id,))
+    
+        
         
     
-    def drop_tables(self):
-        # drop table if it exists
-        self.cur.execute("DROP TABLE IF EXISTS humiture")
-        
-    def close_db(self):
-        self.con.close()
-        
-    def create_humiture_table(self):
-        self.cur.execute("CREATE TABLE IF NOT EXISTS humiture(Time text,\
-                            Illumilluminance int,\
-                            Temperature    float,\
-                            Humidity      float,\
-                            Windspeed    float)")
-        
-#    def process_item(seif,item,spider):
-#        self.store_in_db(item)
-#        return item
-#    
-
-    def store_in_db(self,item):
-        self.cur.execute("INSERT INTO humiture(\
-                        Time,\
-                        Illumilluminance,\
-                        Temperature,\
-                        Humidity,\
-                        Windspeed)\
-            VALUES(?,?,?,?,?)",\
-            (\
-            item.get('',''),
-            item.get('','')
-            item.get('','')
-            item.get('','')
-            ))
-        print('Data stored in Database')
-        self.con.commit()
-        
-        
-        

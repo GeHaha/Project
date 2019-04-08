@@ -14,17 +14,21 @@ sys.path.append("communcate")
 sys.path.append("ui")
 sys.path.append("data_base")
 
+
+from communcate import Communcate
+from data_pack import DataPack
+
+
 from Ui import Ui_MainWindow
-import serial
-import serial.tools.list_ports
 from PyQt5 import QtCore,QtGui,QtWidgets
 
+
+import serial.tools.list_ports
 import binascii
-
 import time
-from communcate import Communcate
 
-from data_pack import DataPack
+
+
 
 
 
@@ -82,12 +86,17 @@ class SignalUi(QtWidgets.QMainWindow,Ui_MainWindow):
         self.Temp_lineEdit.setText(str(self.dataPack.temperature()))
         self.Humidity_lineEdit.setText(str(self.dataPack.humidity()))
         self.Airspped_lineEdit.setText(str(self.dataPack.windspeed()))
-    
-if __name__ == '__main__':
+
+
+
+def main():
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
+   # MainWindow = QtWidgets.QMainWindow()
     ui = SignalUi()
     ui.show()
     sys.exit(app.exec_())
- 
+        
+if __name__ == '__main__':
+    main()
+    
         

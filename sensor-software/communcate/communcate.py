@@ -80,19 +80,7 @@ class Communcate(object):
         
         
 
- 
-#def test():  
-#    sensorCommuncate = Communcate()
-#    sensorCommuncate.openPort()
-#    sensorCommuncate.setRequstConfig(0x01, 'rtu', 0x03)
-#    sensorCommuncate.requestData()
-#     
-#    sensorCommuncate.printData()
-# 
-# 
-#while True:   
-#    test()  
-## 
+
 
 
         
