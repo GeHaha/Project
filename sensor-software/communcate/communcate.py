@@ -71,15 +71,6 @@ class Communcate(object):
         print ("windspeed", self.__package.windspeed())
         
     
-        
-       
-        
-#    def fetchDataBase(self):
-#        self.get_data = dbconnect.dbConnect()
-#        self.data = self.get_data.fetch()
-        
-        
-
 
 
 

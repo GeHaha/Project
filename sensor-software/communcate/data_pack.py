@@ -21,8 +21,9 @@ class DataPack():
     sensor's data package
     """
 
-    def __init__(self, name):
-        self.__name = name
+    def __init__(self,name):
+       self.__name = name
+        
           
     def set_data(self, data):
         self.__set_illuminance(data)

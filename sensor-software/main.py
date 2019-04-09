@@ -28,10 +28,6 @@ import binascii
 import time
 
 
-
-
-
-
 # the name is too bad
 class SignalUi(QtWidgets.QMainWindow,Ui_MainWindow):
     

@@ -5,65 +5,77 @@ Created on Sun Apr  7 21:42:41 2019
 @author: Gehaha
 """
 
+
 import sqlite3
 import os
-con = None
 
+
+
+def singletonDecorator(cls, *args, **kwargs):
+    """定义一个单例装饰器"""
+    instance = {}
+
+    def wrapperSingleton(*args, **kwargs):
+        if cls not in instance:
+            instance[cls] = cls(*args, **kwargs)
+        return instance[cls]
+
+    return wrapperSingleton     
+
+   
+
+@singletonDecorator
 class SetupDB(object):
     
     def __init__(self):
-        self.query()
+
+        self.setup_db_con()
         self.create_tables()
-        
-        
+     
+
     def __del__(self):
-        self.close_db()
+        self.db_close()
         
         
-    def query(self,db_name,sql,data):
-        # access the sqlites data base
-        db_name = 'humiture.db'
-        with sqlite3.connect(db_name) as db:
-            self.cursor = db.cursor()
-            self.cursor.excute(sql,data)
-            self.db.commit()       
-#        
-#    def setup_db_con(self):
-#        self.con = sqlite3.connect()
-#        self.cur = self.con.cursor()
-            
-    def close_db(self):
-        self.db.close()
-#        
-    def create_tables(self,db_name,table_name,sql):
+        
+    def setup_db_con(self):
+        con = None
+        if con is None:            
+            self.con = sqlite3.connect('humiture.db')
+            self.cur = self.con.cursor()
+            return self.cur
+        else:
+            print("connect database success!")
+  
+
+          
+    def db_close(self):
+        self.con.close()
+        
+
+        
+    def create_tables(self):
         self.create_humiture_table()
         
-    
-    def drop_tables(self,db_name,table_name,sql):       
-        # drop table if it exists
-        #self.cur.execute("DROP TABLE IF EXISTS humiture")
-        sql = "DROP TABLE IF EXISTS {0}".format()
-        self.query(db_name,table_name,sql,())
-            
         
-    def create_humiture_table(self,db_name,table_name,sql):
-        table_name = "humiture"
-        sql = """
-            CREATE TABLE IF NOT EXISTS humiture(Time text,\
-                            Illumilluminance int,\
-                            Temperature    float,\
-                            Humidity      float,\
-                            Windspeed    float)
-            """
-        self.query(db_name,table_name,sql,()) 
-               
-#        
-#    def process_item(self,item,spider):
-#        self.store_in_db(item)
-#        return item
-#    
+        
+    def drop_tables(self):       
+        # drop table if it exists
+        self.cur.execute("DROP TABLE IF EXISTS humiture")
+    
+    
+    
+    def create_humiture_table(self):
+        self.cur.execute("\
+                         CREATE TABLE IF NOT EXISTS humiture(\
+                         id INTEGER PRIMART KEY NOT NULL,\
+                         data TEXT,\
+                         illumilluminance inter,\
+                         temperature    real,\
+                         humidity      real,\
+                         windspeed    real\
+                         )")        
+    
 
-
-            
         
         
