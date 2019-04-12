@@ -3,9 +3,10 @@ import sys
 sys.path.append("../communcate")
 from communcate import Communcate
 
+
 def test():  
     sensorCommuncate = Communcate()
-    sensorCommuncate.open()
+    sensorCommuncate.open_port()
     sensorCommuncate.set_modbus_config(0x01, 'rtu', 0x03)
     
     sensorCommuncate.request_data()
@@ -16,10 +17,10 @@ def test():
     while (number):
         number = number - 1
 
-        sensorCommuncate.requestData()
+        sensorCommuncate.request_data()
         sensorCommuncate.print_data()
 
-    sensorCommuncate.close()
+    sensorCommuncate.close_port()
 
 # Run the test    
 test()  

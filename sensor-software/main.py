@@ -13,69 +13,91 @@ import sys
 sys.path.append("communcate")
 sys.path.append("ui")
 sys.path.append("data_base")
+sys.path.append("D:\Project\sensor-software\plot")
 
 from communcate import Communcate
 from data_pack import DataPack
+from draw_graph import DrawGraph
 
-from ui import Ui_MainWindow
+from Ui import Ui_MainWindow
 from PyQt5 import QtCore,QtGui,QtWidgets
 
+
 import serial.tools.list_ports
-import binascii
 import time
 
 
-
 # the name is too bad
-class signal_ui(QtWidgets.QMainWindow,Ui_MainWindow):
+class SignalUi(QtWidgets.QMainWindow,Ui_MainWindow):
     
     def __init__(self):
         
-        super(signal_ui,self).__init__()
+        super(SignalUi,self).__init__()
         self.ser = serial.Serial()
         self.setupUi(self)
-        self.Communcate = Communcate() 
+
+        self.sensorCommuncate= Communcate() 
         self.dataPack = DataPack()
+        self.
         
-        self.Open_pushButton.clicked.connect(self.Open)
-        self.Close_pushButton.clicked.connect(self.Close)
+        self.Open_pushButton.clicked.connect(self.port_open)
+        self.Close_pushButton.clicked.connect(self.port_close)
         self.Signal_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
-        self.Stop_pushButton.clicked.connect(self.stopRead)
+        self.Stop_pushButton.clicked.connect(self.stop_read)
+        self.curve_pushButton.clicked.connect(self.drawing)
+        
         #self.Curve_pushButton.clicked.connect(self.)
     
-    def Open(self):
-        self.Communcate.openPort()
+    def port_open(self):
+        self.sensorCommuncate.open_port()
         self.Show_label.setText("Open port success!")    
     
-    def Close(self):
-        self.Communcate.closePort()
-    
+    def port_close(self):
+        self.sensorCommuncate.close_port()
+
         
-    def single(self,msg):       
-        self.Communcate.requestData()()   
-        self.illumation_lineEdit.setText(self.dataPack.illuminance())
+    def single(self,msg):  
+        self.sensorCommuncate.set_modbus_config(0x01,'rtu',0x03)
+        self.sensorCommuncate.request_data()
+        self.__show_data()
         self.Show_label.setText("Request to be send！")
         
         
     def circle(self,msg):
-        while True:
-            self.Communcate.requestData()
-            #time.sleep(int(self.Time_lineEdit.currentText()))
+        while True:           
+            self.sensorCommuncate.set_modbus_config(0x01,'rtu',0x03)
+            self.sensorCommuncate.request_data()
+            self.__show_data()
+            time.sleep(1000)
         else:
-            return 
-      
+            pass
     
-    def stopRead(self):
-        self.Communcate.pause()
+    def stop_read(self):
+        self.sensorCommuncate.pause()
         self.Show_label.setText('serial read is cancel')
         
+    def drawing(self):
+        pass
+        
+        
+        
+    def __show_data(self):      
+        self.illumation_lineEdit.setText(str(self.dataPack.illuminance()))
+        self.Temp_lineEdit.setText(str(self.dataPack.temperature()))
+        self.Humidity_lineEdit.setText(str(self.dataPack.humidity()))
+        self.Airspped_lineEdit.setText(str(self.dataPack.windspeed()))
+
+
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    ui = signal_ui()
+   # MainWindow = QtWidgets.QMainWindow()
+    ui = SignalUi()
     ui.show()
     sys.exit(app.exec_())
-    
+        
 if __name__ == '__main__':
     main()
+    
         

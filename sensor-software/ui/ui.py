@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("温湿度上位机")
+        MainWindow.setObjectName("温湿度传感器")
         MainWindow.resize(705, 604)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -111,19 +111,25 @@ class Ui_MainWindow(object):
         self.C_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.C_label.setGeometry(QtCore.QRect(190, 70, 31, 41))
         self.C_label.setObjectName("C_label")
+        
         self.Temp_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.Temp_lineEdit.setGeometry(QtCore.QRect(80, 70, 101, 31))
         self.Temp_lineEdit.setText("")
         self.Temp_lineEdit.setObjectName("Temp_lineEdit")
+        
         self.Humidity_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.Humidity_lineEdit.setGeometry(QtCore.QRect(80, 110, 101, 31))
+        self.Humidity_lineEdit.setText("")
         self.Humidity_lineEdit.setObjectName("Humidity_lineEdit")
         self.Temp_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.Temp_label.setGeometry(QtCore.QRect(20, 70, 41, 31))
         self.Temp_label.setObjectName("Temp_label")
+        
         self.Airspped_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.Airspped_lineEdit.setGeometry(QtCore.QRect(80, 150, 101, 31))
+        self.Airspped_lineEdit.setText("")
         self.Airspped_lineEdit.setObjectName("Airspped_lineEdit")
+       
         self.RH_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.RH_label.setGeometry(QtCore.QRect(190, 111, 41, 31))
         self.RH_label.setObjectName("RH_label")
@@ -136,13 +142,15 @@ class Ui_MainWindow(object):
         self.MS_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.MS_label.setGeometry(QtCore.QRect(190, 150, 31, 31))
         self.MS_label.setObjectName("MS_label")
+        
         self.illumation_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.illumation_lineEdit.setGeometry(QtCore.QRect(80, 30, 101, 31))
         self.illumation_lineEdit.setText("")
         self.illumation_lineEdit.setObjectName("illumation_lineEdit")
-        self.Airspeed_label = QtWidgets.QLabel(self.Watch_groupBox)
-        self.Airspeed_label.setGeometry(QtCore.QRect(20, 150, 41, 41))
-        self.Airspeed_label.setObjectName("Airspeed_label")
+        
+        self.windSpeed_label = QtWidgets.QLabel(self.Watch_groupBox)
+        self.windSpeed_label.setGeometry(QtCore.QRect(20, 150, 41, 41))
+        self.windSpeed_label.setObjectName("windspeed_label")
         self.Humidity_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.Humidity_label.setGeometry(QtCore.QRect(20, 110, 41, 41))
         self.Humidity_label.setObjectName("Humidity_label")
@@ -209,7 +217,8 @@ class Ui_MainWindow(object):
         self.LX_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">LX</span></p></body></html>"))
         self.MS_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">m/s</span></p></body></html>"))
         self.illumation_lineEdit.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.00</span></p></body></html>"))
-        self.Airspeed_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">风 速</span></p></body></html>"))
+        self.windSpeed_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">风 速</span></p></body></html>"))
+        #self.windSpeed_lineEdit.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.00</span></p></body></html>"))
         self.Humidity_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">湿 度</span></p></body></html>"))
         self.menu.setTitle(_translate("MainWindow", "设置"))
         self.actionSave.setText(_translate("MainWindow", "save"))
