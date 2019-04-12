@@ -22,60 +22,69 @@ def singletonDecorator(cls, *args, **kwargs):
 
     return wrapperSingleton     
 
-   
 
+   
 @singletonDecorator
 class SetupDB(object):
     
     def __init__(self):
-
-        self.setup_db_con()
+   
+        self.connection = None
+        self.cursor = None
+        self.db_connect()
         self.create_tables()
      
+
 
     def __del__(self):
         self.db_close()
         
-        
-        
-    def setup_db_con(self):
-        con = None
-        if con is None:            
-            self.con = sqlite3.connect('humiture.db')
-            self.cur = self.con.cursor()
-            return self.cur
+   
+             
+    def db_connect(self):
+        if self.connection is None:            
+            self.connection = sqlite3.connect('humiture.db',timeout=3,isolation_level=None,check_same_thread=False)          
+            self.cursor = self.connection.cursor()
+            print("database connect")
+            return self.connection        
         else:
             print("connect database success!")
   
-
-          
+    
+    
     def db_close(self):
-        self.con.close()
-        
+        self.connection.close()
+        print("close database success!")
 
+
+    
+    def db_commit(self):
+        self.connection.commit()
+ 
+       
         
     def create_tables(self):
         self.create_humiture_table()
-        
+    
         
         
     def drop_tables(self):       
         # drop table if it exists
-        self.cur.execute("DROP TABLE IF EXISTS humiture")
+        self.cursor.execute("DROP TABLE IF EXISTS humiture")
+        print("drop humiture success")
     
     
     
     def create_humiture_table(self):
-        self.cur.execute("\
+        self.cursor.execute("\
                          CREATE TABLE IF NOT EXISTS humiture(\
-                         id INTEGER PRIMART KEY NOT NULL,\
-                         data TEXT,\
-                         illumilluminance inter,\
+                         date TEXT,\
+                         illuminance integer,\
                          temperature    real,\
                          humidity      real,\
                          windspeed    real\
                          )")        
-    
+        print("creat humiture table success")
 
         
         

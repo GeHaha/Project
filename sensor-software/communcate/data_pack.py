@@ -23,9 +23,9 @@ class DataPack():
 
     def __init__(self,name):
        self.__name = name
-        
-          
-    def set_data(self, data):
+
+
+    def set_data(self,data):
         self.__set_illuminance(data)
         self.__set_humidity(data)
         self.__set_temperature(data)
@@ -56,20 +56,20 @@ class DataPack():
     def __set_datalen(self,data):
         self.__datalen = data[2]
         
-    def __set_illuminance(self, data):
+    def __set_illuminance(self,data):
         self.__illuminance = minimalmodbus._twoByteStringToNum(data[3:5],
-                                                               numberOfDecimals = 0,signed = False)
-    def __set_temperature(self, data):
+                                                               numberOfDecimals=0,signed=False)
+    def __set_temperature(self,data):
         self.__temperature = minimalmodbus._twoByteStringToNum(data[5:7],
-                                                               numberOfDecimals = 2,signed = False)
+                                                               numberOfDecimals=2,signed=False)
       
-    def __set_humidity(self, data):
+    def __set_humidity(self,data):
         self.__humidity = minimalmodbus._twoByteStringToNum(data[7:9],
-                                                            numberOfDecimals = 2,signed = False)
+                                                            numberOfDecimals=2,signed=False)
       
-    def __set_windspeed(self, data):
-        self.__windspeed = minimalmodbus._twoByteStringToNum( data[9:11], 
-                                                             numberOfDecimals = 2,signed = False)
+    def __set_windspeed(self,data):
+        self.__windspeed = minimalmodbus._twoByteStringToNum(data[9:11], 
+                                                             numberOfDecimals=2,signed=False)
     def __set_crc16(self,data):
         self.__crc16 = data[11:13]
         

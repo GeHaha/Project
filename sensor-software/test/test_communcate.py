@@ -3,6 +3,7 @@ import sys
 sys.path.append("../communcate")
 from communcate import Communcate
 
+
 def test():  
     sensorCommuncate = Communcate()
     sensorCommuncate.open_port()

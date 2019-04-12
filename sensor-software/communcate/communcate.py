@@ -26,7 +26,7 @@ class Communcate(object):
         self.__instrument.serial.stopbits = 1
         self.__instrument.serial.timeout = 2
         self.__instrument.debug = True
-        self.__instrument.handle_local_echo =False
+        self.__instrument.handle_local_echo = False
         self.__instrument.precalculate_read_size = True
         print("port open")
         

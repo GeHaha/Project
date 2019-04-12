@@ -13,18 +13,17 @@ import sys
 sys.path.append("communcate")
 sys.path.append("ui")
 sys.path.append("data_base")
-
+sys.path.append("D:\Project\sensor-software\plot")
 
 from communcate import Communcate
 from data_pack import DataPack
-
+from draw_graph import DrawGraph
 
 from Ui import Ui_MainWindow
 from PyQt5 import QtCore,QtGui,QtWidgets
 
 
 import serial.tools.list_ports
-import binascii
 import time
 
 
@@ -39,13 +38,15 @@ class SignalUi(QtWidgets.QMainWindow,Ui_MainWindow):
 
         self.sensorCommuncate= Communcate() 
         self.dataPack = DataPack()
-
+        self.
         
         self.Open_pushButton.clicked.connect(self.port_open)
         self.Close_pushButton.clicked.connect(self.port_close)
         self.Signal_pushButton.clicked.connect(self.single) 
         self.Circle_pushButton.clicked.connect(self.circle)
         self.Stop_pushButton.clicked.connect(self.stop_read)
+        self.curve_pushButton.clicked.connect(self.drawing)
+        
         #self.Curve_pushButton.clicked.connect(self.)
     
     def port_open(self):
@@ -75,6 +76,10 @@ class SignalUi(QtWidgets.QMainWindow,Ui_MainWindow):
     def stop_read(self):
         self.sensorCommuncate.pause()
         self.Show_label.setText('serial read is cancel')
+        
+    def drawing(self):
+        pass
+        
         
         
     def __show_data(self):      

@@ -5,51 +5,36 @@ Created on Sun Apr  7 19:47:13 2019
 @author: Gehaha
 """
 import sys
-sys.path.append("data_base")
+sys.path.append("D:\Project\sensor-software\data_base")
 #sys.path.append(communcate)
+from store_data import ManageData
+
 
 import time
-import matplotlib
-
-from data_pack import DataPack
+import matplotlib.pyplot as plt
+import numpy
 
 
 class DrawGraph():
     
-    def __init__(self,name):
-        self.__name = name
+    def __init__(self):
+        self.draw_data = ManageData()
         
-        self.package = DataPack("draw_graph")
+        self.draw()
+
        
     def draw(self):
         pass
     
 
-    def __sava_data(self):       
-        data_list = []
-        data_list[0] = self.time.strftime("%Y/%m/%d %H:%M:%S",time.localtime())
-        data_list[1] = self.package.illuminance()
-        data_list[2] = self.package.temperature()
-        data_list[3] = self.package.humidity()
-        data_list[3] = self.package.windspeed()
-
-        return data_list
-    
+    def __sava_data(self):
+        data = self.draw_data.process_data
+        print(data)
         
-    def print_list(self,data):
-        
-        print(self.__sava_data)
-                
-
-    def __delet_data(self):
-        pass
-        
-    def fetch_data(self):
-        pass
     
     
 def test():
-    draw_graph = DrawGraph("draw_graph")
+    draw_graph = DrawGraph()
     draw_graph.sava_data()
 test()
    

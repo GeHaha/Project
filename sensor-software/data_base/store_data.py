@@ -5,100 +5,118 @@ Created on Mon Apr  8 10:28:25 2019
 @author: Gehaha
 """
 import sys
-sys.path.append("communcate")
+sys.path.append("D:\Project\sensor-software\communcate")
+
+from communcate import Communcate
+
+#from communcate.data_pack import DataPack
+from data_pack import DataPack
+
 
 import sqlite3
 import time
 
 
-
 from create_table import  SetupDB
-from communcate.data_pack import DataPack
 
 
 
 class ManageData(object):
 #    db_name = "humiture.db"
-#    table_name = "Humiture"
-
-#    
+#    table_name = "Humiture"   
     def __init__(self):
-#        self.__name = name
            
         self.get_data = DataPack()
         self.setup = SetupDB()
-        self.setup.setup_db_con()
+        self.setup.db_connect()
         self.setup.create_tables()
-        
-        
-        self.con = sqlite3.connect("humiture.db")
-        self.cur = self.con.cursor()
            
+        self.connection = sqlite3.connect("humiture.db",check_same_thread = False)
+        self.cursor = self.connection.cursor()
+#        self.insert_data()   
+        
+        
+               
+    def process_data(self):
+        self.get_data = DataPack()      
+        self.receive_data = []
+        self.receive_data.insert(0,self.get_data.illuminance())
+        self.receive_data.insert(1,self.get_data.temperature())
+        self.receive_data.insert(2,self.get_data.humidity())
+        self.receive_data.insert(3,self.get_data.windspeed())
+        print(type(self.receive_data[0]))
+        print(type(self.receive_data[1]))
+        print(type(self.receive_data[2]))
+        print(type(self.receive_data[3]))
+        print(type(time.strftime("%Y/%m/%d %H:%M:%S",time.localtime())))
+        print(self.receive_data)
+        return self.receive_data
+  
 
-
+      
     def insert_data(self):  
-        # show all the data of table from db
-        self.get_data = DataPack()        
-        self.cur.execute( "\
-            INSERT INTO humiture (date,illuminance,temperature,humidity,windspeed)\
-            VALUES(?,?,?,?,?)",\
-                     (time.strftime("%Y/%m/%d %H:%M:%S",time.localtime()),\
-                      self.get_data.illuminance(),self.get_data.temperature,\
-                      self.get_data.humidity(),self.get_data.windspeed()\
-                      ))        
-        print('Data stored in Database')
-        self.con.commit()
+        # insert all the data of table from db 
+        #self.cursor.execute( """INSERT INTO humiture (date,illuminance,temperature,humidity,windspeed) VALUES(?,?,?,?,?)""",time.strftime("%Y/%m/%d %H:%M:%S",time.localtime()), self.receive_data[0],self.receive_data[1],self.receive_data[2],self.receive_data[3]);
+        
+#        self.cursor.execute("INSERT INTO humiture (date,illuminance,temperature,humidity,windspeed) VALUES('2019/4/11',13,23.4,33.2,0.0)");
+        self.date = time.strftime("%Y/%m/%d %H:%M:%S",time.localtime())
+        self.illuminance = self.receive_data[0]
+        self.temperature = self.receive_data[1]
+        self.humidity = self.receive_data[2]
+        self.windspeed = self.receive_data[3]
+        values = (self.date,self.illuminance,self.temperature,self.humidity,self.windspeed)
+        sql = '''INSERT INTO humiture(date,illuminance,temperature,humidity,windspeed) VALUES(?,?,?,?,?)'''
+        self.cursor.execute(sql,values);
+        
+        self.setup.db_commit()
+      
+        print('Data stored in Database success')
         
 
         
-    def updata_data(self):        
-        self.cur.execute("\
+    def update_data(self): 
+        # update the select data
+        self.cursor.execute("\
                 UPDATE humiture SET date = ?,illuminance = ?,temperature = ?,humidity= ?,windspeed=?\
                 WHERE ID = ?",\
                          (time.strftime("%Y/%m/%d %H:%M:%S",time.localtime()),\
                           self.get_data.illuminance(),self.get_data.temperature,\
                           self.get_data.humidity(),self.get_data.windspeed()\
                           ))
-        self.con.commit()
-        
-  
             
-    def delete_data(self):
-        
-        self.cur.execute( "DELETE data ,illuminance,temperature,humidity,windspeed\
+        self.setup.db_commit()
+  
+      
+                    
+    def delete_data(self): 
+        # delete data from database
+        self.cursor.execute( "DELETE date ,illuminance,temperature,humidity,windspeed\
                           FROM humiter" )
-        self.con.commit()
+        self.setup.db_commit()
         
     
     
     def select_data(self):
-        self.cur.execute(" SELECT data ,illuminance,temperature,humidity,windspeed\
+        self.cursor.execute(" SELECT date ,illuminance,temperature,humidity,windspeed\
                           FROM humiture WHERE data = ?",\
                          ())        
-        data = self.cur.fetchall()
-        return data
-    
+        self.fetch_data = self.cursor.fetchall()
+        return self.fetch_data
+        
     
     
     def select_all_data(self):
-        self.cur.execute(" SELECT *\
-                           FROM humiture")
-        print("hahaha")
-        for row in self.cur:
-            print("Date：",row[0])
+        
+        
+        # select all the data from database
+        self.cursor.execute(" SELECT * from humiture")        
+        for row in self.cursor:
+            print(row)
+            print("date:",row[0])
             print("illuminance:",row[1])
             print("temperture:",row[2])
             print("humidity:",row[3])
             print("windspeed",row[4],"\n")
-    
-   
-def test():    
-    
-    setup = SetupDB()
-    data = ManageData()
-    setup.create_tables()
-    data.insert_data()
-    data.select_all_data()
+ 
 
-test()    
-
+              
