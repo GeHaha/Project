@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("温湿度传感器")
@@ -92,7 +93,8 @@ class Ui_MainWindow(object):
         self.Recieve_label = QtWidgets.QLabel(self.Command_groupBox)
         self.Recieve_label.setGeometry(QtCore.QRect(20, 140, 61, 31))
         self.Recieve_label.setObjectName("Recieve_label")
-        self.Recieve_plainTextEdit = QtWidgets.QPlainTextEdit(self.Command_groupBox)
+        self.Recieve_plainTextEdit = QtWidgets.QPlainTextEdit(
+            self.Command_groupBox)
         self.Recieve_plainTextEdit.setGeometry(QtCore.QRect(100, 120, 281, 71))
         self.Recieve_plainTextEdit.setObjectName("Recieve_plainTextEdit")
         self.Send_label = QtWidgets.QLabel(self.Command_groupBox)
@@ -111,12 +113,12 @@ class Ui_MainWindow(object):
         self.C_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.C_label.setGeometry(QtCore.QRect(190, 70, 31, 41))
         self.C_label.setObjectName("C_label")
-        
+
         self.Temp_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.Temp_lineEdit.setGeometry(QtCore.QRect(80, 70, 101, 31))
         self.Temp_lineEdit.setText("")
         self.Temp_lineEdit.setObjectName("Temp_lineEdit")
-        
+
         self.Humidity_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.Humidity_lineEdit.setGeometry(QtCore.QRect(80, 110, 101, 31))
         self.Humidity_lineEdit.setText("")
@@ -124,12 +126,12 @@ class Ui_MainWindow(object):
         self.Temp_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.Temp_label.setGeometry(QtCore.QRect(20, 70, 41, 31))
         self.Temp_label.setObjectName("Temp_label")
-        
+
         self.Airspped_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.Airspped_lineEdit.setGeometry(QtCore.QRect(80, 150, 101, 31))
         self.Airspped_lineEdit.setText("")
         self.Airspped_lineEdit.setObjectName("Airspped_lineEdit")
-       
+
         self.RH_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.RH_label.setGeometry(QtCore.QRect(190, 111, 41, 31))
         self.RH_label.setObjectName("RH_label")
@@ -142,12 +144,12 @@ class Ui_MainWindow(object):
         self.MS_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.MS_label.setGeometry(QtCore.QRect(190, 150, 31, 31))
         self.MS_label.setObjectName("MS_label")
-        
+
         self.illumation_lineEdit = QtWidgets.QLineEdit(self.Watch_groupBox)
         self.illumation_lineEdit.setGeometry(QtCore.QRect(80, 30, 101, 31))
         self.illumation_lineEdit.setText("")
         self.illumation_lineEdit.setObjectName("illumation_lineEdit")
-        
+
         self.windSpeed_label = QtWidgets.QLabel(self.Watch_groupBox)
         self.windSpeed_label.setGeometry(QtCore.QRect(20, 150, 41, 41))
         self.windSpeed_label.setObjectName("windspeed_label")
@@ -178,10 +180,13 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.Modbus_groupBox.setTitle(_translate("MainWindow", "MODBUS设置"))
-        self.Device_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">设备地址</span></p></body></html>"))
-        self.Function_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">功能码</span></p></body></html>"))
+        self.Device_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">设备地址</span></p></body></html>"))
+        self.Function_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">功能码</span></p></body></html>"))
         self.Port_groupBox.setTitle(_translate("MainWindow", "串口设置"))
-        self.Port_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">串口设置</span></p></body></html>"))
+        self.Port_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">串口设置</span></p></body></html>"))
         self.Port_comboBox.setItemText(0, _translate("MainWindow", "COM1"))
         self.Port_comboBox.setItemText(1, _translate("MainWindow", "COM2"))
         self.Port_comboBox.setItemText(2, _translate("MainWindow", "COM3"))
@@ -192,35 +197,52 @@ class Ui_MainWindow(object):
         self.Baud_comboBox.setItemText(0, _translate("MainWindow", "9600"))
         self.Baud_comboBox.setItemText(1, _translate("MainWindow", "14400"))
         self.Baud_comboBox.setItemText(2, _translate("MainWindow", "19200"))
-        self.Baud_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">波特率</span></p></body></html>"))
+        self.Baud_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">波特率</span></p></body></html>"))
         self.Data_groupBox.setTitle(_translate("MainWindow", "数据查询操作"))
-        self.Time_lineEdit.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">1000</span></p></body></html>"))
-        self.Time_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">定时时长(ms)</span></p></body></html>"))
+        self.Time_lineEdit.setToolTip(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">1000</span></p></body></html>"))
+        self.Time_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">定时时长(ms)</span></p></body></html>"))
         self.Circle_pushButton.setText(_translate("MainWindow", "循环"))
         self.Signal_pushButton.setText(_translate("MainWindow", "单次"))
-        self.Stop_pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">停止</span></p></body></html>"))
+        self.Stop_pushButton.setToolTip(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">停止</span></p></body></html>"))
         self.Stop_pushButton.setText(_translate("MainWindow", "停止"))
         self.Close_pushButton.setText(_translate("MainWindow", "关闭"))
         self.Open_pushButton.setText(_translate("MainWindow", "打开"))
-        self.curve_pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">停止</span></p></body></html>"))
+        self.curve_pushButton.setToolTip(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">停止</span></p></body></html>"))
         self.curve_pushButton.setText(_translate("MainWindow", "曲线图"))
         self.Command_groupBox.setTitle(_translate("MainWindow", "命令观察窗口"))
-        self.Recieve_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">接收命令</span></p></body></html>"))
-        self.Send_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">发送命令</span></p></body></html>"))
-        self.State_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">状  态</span></p></body></html>"))
+        self.Recieve_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">接收命令</span></p></body></html>"))
+        self.Send_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">发送命令</span></p></body></html>"))
+        self.State_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">状  态</span></p></body></html>"))
         self.Watch_groupBox.setTitle(_translate("MainWindow", "观察窗口"))
-        self.C_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">℃</span></p></body></html>"))
-        self.Temp_lineEdit.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
-        self.Temp_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">温 度 </span></p></body></html>"))
-        self.RH_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">%RH</span></p></body></html>"))
-        self.illumation_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">光照度</span></p></body></html>"))
-        self.LX_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">LX</span></p></body></html>"))
-        self.MS_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">m/s</span></p></body></html>"))
-        self.illumation_lineEdit.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.00</span></p></body></html>"))
-        self.windSpeed_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">风 速</span></p></body></html>"))
+        self.C_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">℃</span></p></body></html>"))
+        self.Temp_lineEdit.setToolTip(_translate(
+            "MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
+        self.Temp_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">温 度 </span></p></body></html>"))
+        self.RH_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">%RH</span></p></body></html>"))
+        self.illumation_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">光照度</span></p></body></html>"))
+        self.LX_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">LX</span></p></body></html>"))
+        self.MS_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">m/s</span></p></body></html>"))
+        self.illumation_lineEdit.setToolTip(_translate(
+            "MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.00</span></p></body></html>"))
+        self.windSpeed_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">风 速</span></p></body></html>"))
         #self.windSpeed_lineEdit.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">0.00</span></p></body></html>"))
-        self.Humidity_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">湿 度</span></p></body></html>"))
+        self.Humidity_label.setText(_translate(
+            "MainWindow", "<html><head/><body><p><span style=\" font-size:11pt;\">湿 度</span></p></body></html>"))
         self.menu.setTitle(_translate("MainWindow", "设置"))
         self.actionSave.setText(_translate("MainWindow", "save"))
         self.actionSave_2.setText(_translate("MainWindow", "save"))
-
