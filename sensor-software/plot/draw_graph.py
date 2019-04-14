@@ -5,7 +5,7 @@ Created on Sun Apr  7 19:47:13 2019
 @author: Gehaha
 """
 import sys
-sys.path.append("D:\Project\sensor-software\data_base")
+# sys.path.append("D:\Project\sensor-software\data_base")
 #sys.path.append(communcate)
 from store_data import ManageData
 
