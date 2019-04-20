@@ -6,7 +6,6 @@ Created on Tue Mar 19 15:46:25 2019
 """
 
 import minimalmodbus
-from data_pack import DataPack
 
 class Communcate(object):
     """
@@ -14,11 +13,10 @@ class Communcate(object):
     """
 
     def __init__(self):
-        self.__package = DataPack("sensor of modbus")
+       pass
          
     def open_port(self):
         # TODO fix param
-        minimalmodbus.Instrument.__init__(self,'COM4',1)
         self.__instrument = minimalmodbus.Instrument('COM4',1)
         self.__instrument.serial.baudrate = 9600
         self.__instrument.serial.bytesize = 8
@@ -28,7 +26,11 @@ class Communcate(object):
         self.__instrument.debug = True
         self.__instrument.handle_local_echo = False
         self.__instrument.precalculate_read_size = True
-        print("port open")
+        
+        # if (self.__instrument.serial.is_open()):
+        return True
+        # else:
+        #     return False
         
     def close_port(self):
         self.__instrument.serial.close()
@@ -54,21 +56,19 @@ class Communcate(object):
         payloaddata = '\x00\x00\x00\x04'
         self.__request_data =  minimalmodbus._embedPayload(slaveaddress,mode,functioncode,payloaddata)     
 
+
+
     def request_data(self):
         """request sensor's data utill get the right data.""" 
 
         data = self.__instrument._communicate(self.__request_data, 13)
         
         if (data[0] == '\x01'):
-            self.__package.set_data(data)
+            return data
         else:
-            self.request_data()
+            return self.request_data()
           
-    def print_data(self):
-        print ("illuminance", self.__package.illuminance())
-        print ("temperature", self.__package.temperature())
-        print ("humidity", self.__package.humidity())
-        print ("windspeed", self.__package.windspeed())
+
         
     
 

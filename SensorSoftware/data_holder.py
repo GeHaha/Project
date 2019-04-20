@@ -16,7 +16,7 @@ def singletonDecorator(cls, *args, **kwargs):
     return wrapperSingleton
 
 @singletonDecorator
-class DataPack():
+class DataHolder():
     """
     sensor's data package
     """
