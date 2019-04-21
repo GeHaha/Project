@@ -1,20 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr  8 10:28:25 2019
-
-@author: Gehaha
-"""
-
 import sqlite3
 import time
 
-
-
 class DataBaseHelper(object):
-    def __init__(self):
-        
+    
+    def __init__(self):             
       # self.__table_type
-        self.__connect("data_base/humiture.db")
+      self.__connect("data_base/humiture.db")
+      
  
     def __del__(self):
         
@@ -27,9 +19,9 @@ class DataBaseHelper(object):
     def __connect(self, db_name):
         self.__connection = sqlite3.connect(db_name,\
                                           check_same_thread = False)
-        self.__connection.isolation_level = "DEFERRED"
         self.__cursor = self.__connection.cursor()
-    
+        
+        
     
     def close(self, db_name):
         self.__connection.close()
@@ -47,12 +39,9 @@ class DataBaseHelper(object):
                          )")
         print("create humiture table success.")
 
-
-
     def drop_table(self, table_name):
         self.__cursor.execute("DROP TABLE IF EXISTS humiture")
         print("drop humiture success")
-        
         
 
     def insert_data(self, table_name, data):
@@ -60,19 +49,18 @@ class DataBaseHelper(object):
         values = (date,data.illuminance(), data.temperature(), data.humidity(), data.windspeed())
         sql = '''INSERT INTO humiture(date,illuminance,temperature,humidity,windspeed) VALUES(?,?,?,?,?)'''
         self.__cursor.execute(sql,values);        
-#        self.__connection.commit()
         print('Data stored in Database success')
+        self.__connection.commit()
         
         
+    
     def select_data(self):
         self.__cursor.execute("SELECT date,illuminance,temperature,humidity,windspeed FROM humiture ORDER BY date DESC")        
         fetch_data = self.__cursor.fetchmany()
         return fetch_data
     
         timedate = fetch_data[0][0]
-        print(timedate,"\n")      
-        
-           
+        print(timedate,"\n") 
     
     def delete_data(self, table_name):
         pass
@@ -85,6 +73,3 @@ class DataBaseHelper(object):
 
 
 
- 
-
-              
