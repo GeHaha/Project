@@ -10,6 +10,9 @@ sys.path.append("ui")
 sys.path.append("data_base")
 sys.path.append("plot")
 
+
+from PyQt5.QtWidgets import QApplication,QMainWindow,QWidget
+from plot_ui import Ui_Form
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
 import serial.tools.list_ports
@@ -26,11 +29,12 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 # TODO the name is too bad
-class SignalUi(QtWidgets.QMainWindow, Ui_MainWindow):
+#class SignalUi(QtWidgets.QMainWindow, Ui_MainWindow):
+class parentWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self):
 
-        super(SignalUi, self).__init__()
+        super(parentWindow, self).__init__()
         self.setupUi(self)
 
         self.__sensorCommuncate = Communcate()
@@ -47,9 +51,7 @@ class SignalUi(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Signal_pushButton.clicked.connect(self.single)
         self.Circle_pushButton.clicked.connect(self.circle)
         self.Stop_pushButton.clicked.connect(self.stop_read)
-        self.curve_pushButton.clicked.connect(self.drawing)
 
-        # self.Curve_pushButton.clicked.connect(self.)
 
     def port_open(self):
         if self.__sensorCommuncate.open_port():
@@ -57,12 +59,8 @@ class SignalUi(QtWidgets.QMainWindow, Ui_MainWindow):
         else: 
             self.Show_label.setText("Open port failed!")
 
-
-
     def port_close(self):
         self.__sensorCommuncate.close_port()
-
-
 
     def single(self):
         data = self.__sensorCommuncate.request_data()
@@ -71,28 +69,20 @@ class SignalUi(QtWidgets.QMainWindow, Ui_MainWindow):
         values = self.__db_helper.select_data()
         self.graph.update_data(values)
         self.graph.init_plot()   
-        
-        
-        
-        self.__show_data()
-    
+        self.__show_data() 
     
     def circle(self):
         self.__timer.start(5000)
 #        values = self.__db_helper.select_data()
 #        self.graph.get_data(values)
 #        self.graph.draw_plot()
-#        
-        
-        
+#               
     def stop_read(self):
         self.__sensorCommuncate.pause()
         self.__timer.stop()
         self.__clear_data()
 
-    def drawing(self):
-        pass
-    
+
     def __clear_data(self):
         self.illumation_lineEdit.clear()
         self.Temp_lineEdit.clear()
@@ -106,13 +96,92 @@ class SignalUi(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Airspped_lineEdit.setText(str(self.__dataHolder.windspeed()))
 
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-   # MainWindow = QtWidgets.QMainWindow()
-    ui = SignalUi()
-    ui.show()
-    sys.exit(app.exec_())
 
+
+class childWindow(QWidget,Ui_Form):
+    
+    def __init__(self):
+        super(childWindow, self).__init__()
+        QWidget.__init__(self)  
+        self.__db_get = DataBaseHelper()
+        self.setupUi(self)        
+        self.que_pushButton.clicked.connect(self.plot_histroy_data)
+        self.stop_pushButton.clicked.connect(self.stop_draw)
+        
+    def set_button(self):
+        self.que_pushButton.setEnabled(True)
+        self.que_pushButton.setText("查询")
+        
+    def plot_histroy_data(self):
+        self.que_pushButton.setEnabled(False)
+        self.que_pushButton.setText("查询中")
+        self.select_time()
+        self.draw_curve()
+#        self.que_pushButton.setEnabled(True)
+
+        
+    def select_time(self):
+        
+        if self.time_comboBox.currentIndex() == 0:
+            self.__db_get.one_hour_data() 
+            print("2")   
+            
+        elif self.time_comboBox.currentIndex() == 1:
+            self.__db_get.three_hours_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex() == 2:
+            self.__db_get.one_day_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex() == 3:
+            self.__db_get.three_day_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex() == 4:
+            self.__db_get.senven_days_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex()== 5:
+            self.__db_get.fifteen_days_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex()== 6:
+           self.__db_get.one_month_data()
+           self.set_button()
+           
+        elif self.time_comboBox.currentIndex()== 7:
+            self.__db_get.three_month_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex() == 8:
+            self.__db_get.six_month_data()
+            self.set_button()
+            
+        elif self.time_comboBox.currentIndex()== 9:
+            self.__db_get.one_year_data()
+            self.set_button()
+        
+        
+    def draw_curve(self):
+        self.graph = DrawGraph()
+        
+        
+    def stop_draw(self):
+        pass
+    
+    
+
+
+def main():
+    app=QtWidgets.QApplication(sys.argv)
+    window = parentWindow()
+    child = childWindow()    
+    plt_btn = window.curve_pushButton
+    plt_btn.clicked.connect(child.show)      
+    window.show()
+    sys.exit(app.exec_())   
 
 if __name__ == '__main__':
     main()
+

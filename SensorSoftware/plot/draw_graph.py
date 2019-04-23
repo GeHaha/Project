@@ -31,8 +31,7 @@ class DrawGraph(object):
     
     def __init__(self):
         # Trun matplotlib interactive mode on
-        plt.ion()
-        
+        plt.ion()        
         # initial the plot variable
         self.timestampValue = []
         self.illuminanceValue = []
@@ -58,7 +57,6 @@ class DrawGraph(object):
         
         
     def update_data(self,values):
-
         timestamp = values[0][0]   
         illuminance = values[0][1]
         temperature = values[0][2]      
