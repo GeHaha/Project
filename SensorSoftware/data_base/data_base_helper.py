@@ -61,76 +61,98 @@ class DataBaseHelper(object):
         timedate = fetch_data[0][0]
         print(timedate,"\n") 
      
+#        
+#    def one_hour_data(self):
+#        value = []
+#        cursor = self.__cursor.execute("select * from humiture where \
+#                              date  > datetime('now','-1 hour','localtime')");
+#        for row in cursor:
+#            value.append(row)
+#            print(row)
+#        return value
     
-    def one_hour_data(self):
-        self.__cursor.execute("select * from humiture where \
-                             date  > datetime('now','-1 hour','localtime')");
-#        for row in data:
-#            print("Time = ",row[0])
-#            print("illuminance = ",row[0])
-#            print("temperature = ",row[0]) 
-#            print("humidity = ",row[0])
-#            print("windspeed = ",row[0]) 
-        data = self.__cursor.fetchall()
-        print(data)
-        print("读了一小时数据")
     
-    def three_hours_data(self):
-        self.__cursor.execute("select * from humiture where \
-                              date  > datetime('now','-3 hour','localtime')");
-    
+    def six_hours_data(self):
+        value = []
+        cursor = self.__cursor.execute("select * from humiture where \
+                              date  > datetime('now','-6 hour','localtime')");
+        for row in cursor:
+            value.append(row)
+            print(row)
+        return value
+            
     
     def one_day_data(self):
-        self.__cursor.execute("select * from humiture where \
+        value = []
+        cursor = self.__cursor.execute("select * from humiture where \
                     date >= datetime('now','start of day','+0 day') and\
                     date < datetime('now','start of day','+1 day')");
-        one_data = self.__cursor.fetchall()
-        print(one_data)
-    
-                     
+        for row in cursor:
+            value.append(row)
+        return value
+        
     def three_days_data(self):
-        self.__cursor.execute("select * from humiture where \
-                    date >= datetime('now','start of day','-3 day') and\
-                    date < datetime('now','start of day','+0 day')")
-        three_data = self.__cursor.fetchall()
-        print(three_data)
+        cursor = self.__cursor.execute("select * from humiture where \
+                    date >= datetime('now','start of day','-2 day') and\
+                    date < datetime('now','start of day','+1 day')")
+        for row in cursor:
+           print(row)
+        
+            
     
     def senven_days_data(self):        
         # 这个时间取的是 周一到周日为一周
-        self.__connect("data_base/humiture.db")
-        self.__cursor.execute("select * from humiture where \
+        cursor = self.__cursor.execute("select * from humiture where \
                  date >= datetime('now','start of day','-7 day','weekday 1') AND\
                  date < datetime('now','start of day','+0 day','weekday 1')");
-
-        senven_data = self.__cursor.fetchall()
-        print(senven_data)
+        for row in cursor:
+            return row
+             
         
     def fifteen_days_data(self):
-        self.__cursor.execute("select * from humiture where \
+        cursor = self.__cursor.execute("select * from humiture where \
                  date >= datetime('now','start of day','-15 day') AND\
                  date < datetime('now','start of day','+0 day')");
-    
+        for row in cursor:
+            print(row)
+            print('\n')
+            
     
     def one_month_data(self):
-        self.__cursor.execute("select * from humiture where \
+        #获取当月的数据
+        cursor = self.__cursor.execute("select * from humiture where \
                  date >= datetime('now','start of month','+0 month','-0 day') and \
                  date < datetime('now','start of month','+1 month','0 day')");
+        for row in cursor:
+            print(row)
+            print('\n')
+            
     
-    
-    def three_month_data(self):
-        self.__cursor.execute("select * from humiture where \
+    def three_month_data(self):  
+        # 获取的是最近三个月数据，包括当月
+        cursor = self.__cursor.execute("select * from humiture where \
                  date >= datetime('now','start of month','-3 month','-0 day') and \
                  date < datetime('now','start of month','+0 month','0 day')");
-         
+        for row in cursor:
+            print(row)
+            print('\n')
+            
+            
     def six_month_data(self):
-        self.__cursor.execute("select * from humiture where \
+        cursor = self.__cursor.execute("select * from humiture where \
                  date >= datetime('now','start of month','-6 month','-0 day') and \
                  date < datetime('now','start of month','+0 month','0 day')");
-        
+        for row in cursor:
+            print(row)
+            print('\n')
+            
     def one_year_data(self):
-        self.__cursor.execute("select * from humiture where\
+        cursor = self.__cursor.execute("select * from humiture where\
                               date between () and ()");
-    
+        for row in cursor:
+            print(row)
+            print('\n')
+            
     
     def total_changes_data(self):
         pass
