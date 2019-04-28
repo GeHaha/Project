@@ -16,7 +16,7 @@ class Communcate(object):
 
     def open_port(self):
         # TODO fix param
-        self.__instrument = minimalmodbus.Instrument('COM4', 1)
+        self.__instrument = minimalmodbus.Instrument('COM3', 1)
         self.__instrument.serial.baudrate = 9600
         self.__instrument.serial.bytesize = 8
         self.__instrument.serial.parity = minimalmodbus.serial.PARITY_NONE
@@ -25,14 +25,14 @@ class Communcate(object):
         self.__instrument.debug = True
         self.__instrument.handle_local_echo = False
         self.__instrument.precalculate_read_size = True
-
+       
         # if (self.__instrument.serial.is_open()):
         return True
         # else:
         #     return False
 
     def close_port(self):
-        self.__instrument.serial.close()
+        self.__instrument.close_port_after_each_call = False
 
     def pause(self):
         self.__instrument.serial.cancel_read()
@@ -56,7 +56,7 @@ class Communcate(object):
             slaveaddress, mode, functioncode, payloaddata)
 
     def request_data(self):
-        """request sensor's data utill get the right data."""
+        """request sensor's data untill get the right data."""
 
         data = self.__instrument._communicate(self.__request_data, 13)
 

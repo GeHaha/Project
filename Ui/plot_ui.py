@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QDate,   QDateTime , QTime,Qt
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -69,5 +69,6 @@ class Ui_Form(object):
         self.end_time_label.setText(_translate("Form", " 结束时间："))
         self.start_dateTimeEdit.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
         self.end_dateTimeEdit.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
-  
+        
+        
     

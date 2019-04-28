@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Apr  7 19:47:13 2019
+Created on Sat Apr 27 14:29:50 2019
 
-@author: Gehaha
+@author: 86157
 """
+
 import sys
 sys.path.append("D:\Project\sensor-software\data_base")
 
@@ -11,20 +12,15 @@ sys.path.append("D:\Project\sensor-software\data_base")
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib import style
+import pyqtgraph as pg
 style.use("ggplot")
 
 import matplotlib
 from data_base.data_base_helper  import DataBaseHelper
-from matplotlib.dates import DateFormatter
-import matplotlib.ticker as ticker
-
-import pyqtgraph as pg
 
 
 class DrawGraph(object):   
-    def __init__(self):
-        plt.ion()
-        # Trun matplotlib interactive mode on       
+    def __init__(self):       
         # initial the plot variable
         self.timestampValue = []
         self.illuminanceValue = []
@@ -60,7 +56,7 @@ class DrawGraph(object):
         self.temperatureValue = [i[2] for i in values]
         self.humidityValue = [i[3] for i in values]
         self.windspeedValue = [i[4] for i in values]
-        
+        print(self.timestampValue)
         
         self.illuminanceLine, = self.actualValueGraph.plot(self.timestampValue,self.illuminanceValue,
                                                            color = "red",linewidth = 0.5,label = " illuminance")
