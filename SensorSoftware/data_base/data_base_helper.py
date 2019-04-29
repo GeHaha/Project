@@ -48,7 +48,7 @@ class DataBaseHelper(object):
         
 
     def insert_data(self, table_name, data):
-        storedate = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+        storedate = time.strftime("%Y-%m-%d%H:%M:%S",time.localtime())
         values = (storedate,data.illuminance(), data.temperature(), data.humidity(), data.windspeed())
         sql = '''INSERT INTO humiture(storedate,illuminance,temperature,humidity,windspeed) VALUES(?,?,?,?,?)'''
         self.__cursor.execute(sql,values);        
@@ -59,8 +59,9 @@ class DataBaseHelper(object):
         
     def select_any_time(self,startdate,enddate):
         value = []
-        cursor = self.__cursor.execute( "select * from humiture where  \
-                                       storedate between ? and  ? ",(startdate,enddate))
+        sql=  "select * from humiture where storedate \
+         between '%s'  and '%s';"%(str(startdate),str(enddate))       
+        cursor = self.__cursor.execute(sql)
         for row in cursor:
             value.append(row)
             print(value)
@@ -74,8 +75,6 @@ class DataBaseHelper(object):
 #        timedate = fetch_data[0][0]
 #        print(timedate,"\n") 
     
-
-
     def select_one_hour(self):
         value = []
         cursor = self.__cursor.execute("select * from humiture where \

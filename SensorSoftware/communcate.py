@@ -16,7 +16,7 @@ class Communcate(object):
 
     def open_port(self):
         # TODO fix param
-        self.__instrument = minimalmodbus.Instrument('COM3', 1)
+        self.__instrument = minimalmodbus.Instrument('COM4', 1)
         self.__instrument.serial.baudrate = 9600
         self.__instrument.serial.bytesize = 8
         self.__instrument.serial.parity = minimalmodbus.serial.PARITY_NONE

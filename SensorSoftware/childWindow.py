@@ -10,6 +10,7 @@ sys.path.append("ui")
 sys.path.append("data_base")
 sys.path.append("plot")
 
+import pyqtgraph as pg
 from PyQt5.QtCore import QDate,   QDateTime , QTime,Qt
 from PyQt5.QtWidgets import QApplication,QMainWindow,QWidget
 from plot_ui import Ui_Form
@@ -26,47 +27,57 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s- %(message)s')
 
 #画图窗口
-class childWindow(QWidget,Ui_Form):
-    
+class childWindow(QWidget,Ui_Form):    
     def __init__(self):
         super(childWindow, self).__init__()
         QWidget.__init__(self)  
+        
+#        self.widget = QtWidgets.QWidget()
+#        self.layout = QtWidgets.QGridLayout()  # 实例化一个网格部件‘
+#        self.widget.setLayout(self.layout)
+#        pw = pg.PlotWidget() #实例化一个绘图部件
+#        
+#
+#        
         self.__db_get = DataBaseHelper()
         self.graph = DrawGraph()
         self.setupUi(self)        
         self.que_pushButton.clicked.connect(self.plot_histroy_data)
-
+        self.select_pushButtonton.clicked.connect(self.plot_any_time_date)
               
     def set_button(self):
         self.que_pushButton.setEnabled(True)
-        self.que_pushButton.setText("查询")
+        self.que_pushButton.setText("查询固定日期")
         
     def read_start_time(self):
         start_time = self.start_dateTimeEdit.dateTime()
         #将时间2000-01-01T00:00:00 转换成2000-01-01 00 :00:00
         start_time = start_time.toString(Qt.ISODate)
-        start_time = start_time.replace('T','\000')
-        print(start_time)
+#        start_time = start_time.replace('T','\000')
         return start_time
     
     def read_end_time(self):
        end_time = self.end_dateTimeEdit.dateTime()
        end_time = end_time.toString(Qt.ISODate)
-       end_time = end_time.replace('T','\000')
-       print(end_time)
+#       end_time = end_time.replace('T','\000')
        return end_time
 
-   
+
+    def plot_any_time_date(self):
+        self.select_pushButton.setEnabled(False)
+        self.select_pushButton.setText("查询中")
+        startdate = self.read_start_time()
+        enddate = self.read_end_time()
+        values = self.__db_get.select_any_time(startdate,enddate)
+        self.graph.plot_line(values)
+        self.select_pushButton.setEnabled(True)
+        self.select_pushButtonton.setText("查询指定日期")
+        
         
     def plot_histroy_data(self):
         self.que_pushButton.setEnabled(False)
         self.que_pushButton.setText("查询中")
-#        self.select_time()
-        startdate = self.read_start_time()
-        enddate = self.read_end_time()
-        values = self.__db_get.select_any_time(startdate,enddate)
-        print(values)
-#        self.graph.plot_line(values)
+        self.select_time()
         self.set_button()
         
     def select_time(self):
@@ -74,8 +85,7 @@ class childWindow(QWidget,Ui_Form):
             values = self.__db_get.select_one_hour() 
             self.graph.plot_line(values)
             self.set_button()
-      
-        
+           
         if self.time_comboBox.currentIndex() == 1:           
             values = self.__db_get.select_three_hour() 
             self.graph.plot_line(values)
@@ -95,26 +105,22 @@ class childWindow(QWidget,Ui_Form):
             self.set_button()
             values = self.__db_get.select_three_days()
             self.graph.plot_line(values)
-
             
         elif self.time_comboBox.currentIndex() == 5:
             self.set_button()
             values = self.__db_get.select_senven_days()
-            self.graph.plot_line(values)
-            
+            self.graph.plot_line(values)           
             
         elif self.time_comboBox.currentIndex()== 6:
             self.set_button()
             values = self.__db_get.select_fifteen_days()
             self.graph.plot_line(values)
-            
-            
+                     
         elif self.time_comboBox.currentIndex()== 7:
            self.set_button()
            values = self.__db_get.select_one_month()
            self.graph.plot_line(values)
-           
-           
+                     
         elif self.time_comboBox.currentIndex()== 8:
             self.__db_get.select_three_month()
             self.set_button()
@@ -123,8 +129,7 @@ class childWindow(QWidget,Ui_Form):
             self.set_button()
             values = self.__db_get.select_six_month()
             self.graph.plot_line(values)
-            
-            
+                       
         elif self.time_comboBox.currentIndex()== 10:
             self.set_button()
             values = self.__db_get.select_one_year()

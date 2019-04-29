@@ -26,9 +26,8 @@ import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s- %(message)s')
 
-# sys.path.append("D:\Project\sensor-software\plot")
-# TODO the name is too bad
 
+# TODO the name is too bad
 class parentWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
 
