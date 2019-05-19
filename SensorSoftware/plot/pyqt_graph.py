@@ -8,6 +8,8 @@ Created on Sat Apr 27 14:29:50 2019
 import sys
 sys.path.append("D:\Project\sensor-software\data_base")
 
+import pyqtgraph as pg
+
 #sys.path.append(communcate)
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -17,7 +19,6 @@ style.use("ggplot")
 
 import matplotlib
 from data_base.data_base_helper  import DataBaseHelper
-
 
 class DrawGraph(object):   
     def __init__(self):       

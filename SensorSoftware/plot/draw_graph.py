@@ -23,7 +23,6 @@ import pyqtgraph as pg
 
 class DrawGraph(object):   
     def __init__(self):
-        plt.ion()
         # Trun matplotlib interactive mode on       
         # initial the plot variable
         self.timestampValue = []
@@ -42,16 +41,15 @@ class DrawGraph(object):
         self.actualValueGraph.set_title("Humiture") 
 #        self.actualValueGraph.xticks(rotation = 70)
         self.actualValueGraph.legend(loc = "upper right",frameon = False)
-        plt.xticks(rotation = 90,fontsize = 5)
+        plt.xticks(rotation = 90,fontsize = 4)
 #        loc = plticker.MultipleLocator(base=1.0) # this locator puts ticks at regular intervals
 #        self.actualValueGraph.xaxis.set_major_locator(loc)
      
         for label in self.actualValueGraph.get_xticklabels(): 
             label.set_visible(False) 
-        for label in self.actualValueGraph.get_xticklabels()[::2]: 
+        for label in self.actualValueGraph.get_xticklabels()[::1]: 
             label.set_visible(True)
-        plt.ion()
-        
+
         
     def plot_line(self,values):
         # update the plot value of the graph

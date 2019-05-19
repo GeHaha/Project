@@ -58,16 +58,17 @@ class DataBaseHelper(object):
         
         
     def select_any_time(self,startdate,enddate):
+        print(startdate)
         value = []
         sql=  "select * from humiture where storedate \
-         between '%s'  and '%s';"%(str(startdate),str(enddate))       
+         between '%s' and '%s';"%(str(startdate),str(enddate))       
         cursor = self.__cursor.execute(sql)
         for row in cursor:
             value.append(row)
             print(value)
         return value
 
-      
+     
 #    def select_data(self):
 #        self.__cursor.execute("SELECT storedate,illuminance,temperature,humidity,windspeed FROM humiture ORDER BY storedate DESC")        
 #        fetch_data = self.__cursor.fetchmany()
